@@ -9,11 +9,16 @@ import org.library.backend.Infrastructure.Entity.AuthEntity;
 import org.library.backend.Infrastructure.Entity.UserEntity;
 import org.library.backend.Infrastructure.Repository.AuthRepository;
 import org.library.backend.Infrastructure.Repository.UserRepository;
-import org.library.backend.commonTypes.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.library.backend.Service.exceptions.UserAlreadyExistsException;
+import org.springframework.web.server.ResponseStatusException;
+
+
+import java.util.Optional;
 
 @Service
 public class AuthService {
@@ -31,6 +36,10 @@ public class AuthService {
     }
 
     public RegisterResponseDto register(RegisterDto registerDto) {
+        Optional<AuthEntity> existingAuth = authRepository.findByUsername(registerDto.getUsername());
+        if (existingAuth.isPresent()) {
+            throw UserAlreadyExistsException.create(registerDto.getUsername());
+        }
         UserEntity userEntity = new UserEntity();
         userEntity.setEmail(registerDto.getEmail());
         userRepository.save(userEntity);
@@ -46,10 +55,11 @@ public class AuthService {
     }
 
     public LoginResponseDto login(LoginDto loginDto) {
-        AuthEntity authEntity = authRepository.findByUsername(loginDto.getUsername()).orElseThrow(EntityNotFoundException::new);
+        AuthEntity authEntity = authRepository.findByUsername(loginDto.getUsername())
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + loginDto.getUsername()));
 
-        if(!passwordEncoder.matches(loginDto.getPassword(), authEntity.getPassword())) {
-            throw new RuntimeException();
+        if (!passwordEncoder.matches(loginDto.getPassword(), authEntity.getPassword())) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid username or password");
         }
 
         String token = jwtService.generateToken(authEntity);

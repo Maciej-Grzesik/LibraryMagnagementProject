@@ -6,6 +6,7 @@ import org.library.backend.Controller.DTO.BookDto.CreateBookResponseDto;
 import org.library.backend.Controller.DTO.BookDto.GetBookDto;
 import org.library.backend.Infrastructure.Entity.BookEntity;
 import org.library.backend.Infrastructure.Repository.BookRepository;
+import org.library.backend.Service.exceptions.BookNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,7 +27,8 @@ public class BookService {
     }
 
     public GetBookDto getBookById(long id) {
-        var book = bookRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        var book = bookRepository.findById(id)
+                .orElseThrow(() -> new BookNotFoundException(id));
         return new GetBookDto(book.getId(), book.getIsbn(), book.getTitle(), book.getAuthor(), book.getPublisher(), book.getPublishYear(), book.getAvailableCopies() > 0);
     }
 

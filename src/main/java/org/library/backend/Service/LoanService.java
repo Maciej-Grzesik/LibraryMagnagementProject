@@ -8,6 +8,9 @@ import org.library.backend.Infrastructure.Entity.LoanEntity;
 import org.library.backend.Infrastructure.Repository.BookRepository;
 import org.library.backend.Infrastructure.Repository.LoanRepository;
 import org.library.backend.Infrastructure.Repository.UserRepository;
+import org.library.backend.Service.exceptions.BookNotFoundException;
+import org.library.backend.Service.exceptions.LoanNotFoundException;
+import org.library.backend.Service.exceptions.UserNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,7 +29,7 @@ public class LoanService {
     }
 
     public GetLoanDto getLoanDto(long id) {
-        var loan = loanRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        var loan = loanRepository.findById(id).orElseThrow(() -> new LoanNotFoundException(id));
         return new GetLoanDto(loan.getBook(), loan.getUser(), loan.getLoanDate(), loan.getDueDate(), loan.getReturnDate());
     }
 
@@ -37,8 +40,8 @@ public class LoanService {
 
     public CreateLoanResponseDto createLoan(CreateLoanDto loanDto) {
         var loanEntity = new LoanEntity();
-        var bookEntity = bookRepository.findById(loanDto.getBookId()).orElseThrow(EntityNotFoundException::new);
-        var userEntity = userRepository.findById(loanDto.getUserId()).orElseThrow(EntityNotFoundException::new);
+        var bookEntity = bookRepository.findById(loanDto.getBookId()).orElseThrow(() -> new BookNotFoundException(loanDto.getBookId()));
+        var userEntity = userRepository.findById(loanDto.getUserId()).orElseThrow(() -> new UserNotFoundException(loanDto.getUserId()));
         loanEntity.setUser(userEntity);
         loanEntity.setBook(bookEntity);
         loanEntity.setLoanDate(loanDto.getLoanDate());

@@ -8,6 +8,9 @@ import org.library.backend.Infrastructure.Entity.ReviewEntity;
 import org.library.backend.Infrastructure.Repository.BookRepository;
 import org.library.backend.Infrastructure.Repository.ReviewRepository;
 import org.library.backend.Infrastructure.Repository.UserRepository;
+import org.library.backend.Service.exceptions.BookNotFoundException;
+import org.library.backend.Service.exceptions.ReviewNotFoundException;
+import org.library.backend.Service.exceptions.UserNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,8 +39,8 @@ public class ReviewService {
     }
 
     public CreateReviewResponseDto createReview(CreateReviewDto reviewDto) {
-        var userEntity = userRepository.findById(reviewDto.getUserId()).orElseThrow(EntityNotFoundException::new);
-        var bookEntity = bookRepository.findById(reviewDto.getBookId()).orElseThrow(EntityNotFoundException::new);
+        var bookEntity = bookRepository.findById(reviewDto.getBookId()).orElseThrow(() -> new BookNotFoundException(reviewDto.getBookId()));
+        var userEntity = userRepository.findById(reviewDto.getUserId()).orElseThrow(() -> new UserNotFoundException(reviewDto.getUserId()));
         var reviewEntity = new ReviewEntity();
 
         reviewEntity.setBook(bookEntity);
@@ -52,7 +55,7 @@ public class ReviewService {
 
     public void deleteReview(long id) {
         if(!reviewRepository.existsById(id)) {
-            throw new EntityNotFoundException();
+            throw new ReviewNotFoundException(id);
         }
         reviewRepository.deleteById(id);
     }

@@ -7,6 +7,7 @@ import org.library.backend.Controller.DTO.BookInfoDto.GetBookInfoDto;
 import org.library.backend.Infrastructure.Entity.BookInfoEntity;
 import org.library.backend.Infrastructure.Repository.BookInfoRepository;
 import org.library.backend.Infrastructure.Repository.BookRepository;
+import org.library.backend.Service.exceptions.BookNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -26,8 +27,10 @@ public class BookInfoService {
 
     public CreateBookInfoResponseDto createBookInfo(CreateBookInfoDto bookInfoDto) {
         var bookInfoEntity = new BookInfoEntity();
-        var bookEntity = bookRepository.findById(bookInfoDto.getBookId()).orElseThrow(EntityNotFoundException::new);
+        var bookEntity = bookRepository.findById(bookInfoDto.getBookId())
+                .orElseThrow(() -> new BookNotFoundException(bookInfoDto.getBookId()));
         bookInfoEntity.setBook(bookEntity);
+
         bookInfoEntity.setGenre(bookInfoDto.getGenre());
         bookInfoEntity.setSummary(bookInfoDto.getSummary());
         bookInfoEntity.setImgURL(bookInfoDto.getImgURL());
