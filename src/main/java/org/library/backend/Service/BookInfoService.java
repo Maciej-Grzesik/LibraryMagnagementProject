@@ -7,6 +7,7 @@ import org.library.backend.Controller.DTO.BookInfoDto.GetBookInfoDto;
 import org.library.backend.Infrastructure.Entity.BookInfoEntity;
 import org.library.backend.Infrastructure.Repository.BookInfoRepository;
 import org.library.backend.Infrastructure.Repository.BookRepository;
+import org.library.backend.Service.exceptions.BookInfoNotFoundException;
 import org.library.backend.Service.exceptions.BookNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -42,7 +43,7 @@ public class BookInfoService {
 
     public void deleteBookInfo(long id) {
         if (!bookInfoRepository.existsById(id)) {
-            throw new EntityNotFoundException();
+            throw new BookInfoNotFoundException(id);
         }
         bookInfoRepository.deleteById(id);
     }

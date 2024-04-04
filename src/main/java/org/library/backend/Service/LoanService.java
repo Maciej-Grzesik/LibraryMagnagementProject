@@ -54,7 +54,7 @@ public class LoanService {
 
     public void deleteLoan(long id) {
         if (!loanRepository.existsById(id)){
-            throw new EntityNotFoundException();
+            throw new LoanNotFoundException(id);
         }
         loanRepository.deleteById(id);
     }

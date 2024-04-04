@@ -1,6 +1,5 @@
 package org.library.backend.Service;
 
-import jakarta.persistence.EntityNotFoundException;
 import org.library.backend.Controller.DTO.ReviewDto.CreateReviewDto;
 import org.library.backend.Controller.DTO.ReviewDto.CreateReviewResponseDto;
 import org.library.backend.Controller.DTO.ReviewDto.GetReviewDto;

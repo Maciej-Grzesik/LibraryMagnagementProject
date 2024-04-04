@@ -48,7 +48,7 @@ public class BookService {
 
     public void deleteBook(long id) {
         if(!bookRepository.existsById(id)){
-            throw new EntityNotFoundException();
+            throw new BookNotFoundException(id);
         }
         bookRepository.deleteById(id);
     }
