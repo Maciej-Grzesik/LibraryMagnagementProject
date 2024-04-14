@@ -36,9 +36,11 @@ public class AuthController {
      * @return the ResponseEntity containing the registration response
      */
     @PostMapping("/register")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<RegisterResponseDto> register(@RequestBody RegisterDto requestBody) {
+        System.out.println("Received registration request: " + requestBody.toString());
         RegisterResponseDto responseDto = authService.register(requestBody);
+
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
     }
 
@@ -52,6 +54,7 @@ public class AuthController {
     @PreAuthorize("permitAll()")
     public ResponseEntity<LoginResponseDto> login(@RequestBody LoginDto loginDto) {
         LoginResponseDto dto = authService.login(loginDto);
+
         return new ResponseEntity<>(dto, HttpStatus.CREATED);
     }
 }

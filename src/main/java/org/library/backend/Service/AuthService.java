@@ -43,22 +43,24 @@ public class AuthService {
      * @return the response containing registration information
      */
     public RegisterResponseDto register(RegisterDto registerDto) {
+
         Optional<AuthEntity> existingAuth = authRepository.findByUsername(registerDto.getUsername());
         if (existingAuth.isPresent()) {
             throw UserAlreadyExistsException.create(registerDto.getUsername());
         }
         UserEntity userEntity = new UserEntity();
         userEntity.setEmail(registerDto.getEmail());
-        userRepository.save(userEntity);
+        userEntity.setFullUsername("Placeholder");
+        UserEntity createdUser = userRepository.save(userEntity);
 
         AuthEntity authEntity = new AuthEntity();
         authEntity.setPassword(passwordEncoder.encode(registerDto.getPassword()));
         authEntity.setUsername(registerDto.getUsername());
         authEntity.setUserRole(registerDto.getRole());
-        authEntity.setUser(userEntity);
+        authEntity.setUser(createdUser);
 
-        authRepository.save(authEntity);
-        return new RegisterResponseDto(authEntity.getId(), authEntity.getUsername(), authEntity.getUserRole());
+        AuthEntity createdAuth = authRepository.save(authEntity);
+        return new RegisterResponseDto(createdAuth.getId(), createdAuth.getUsername(), createdAuth.getUserRole());
     }
 
     /**
@@ -74,7 +76,6 @@ public class AuthService {
         if (!passwordEncoder.matches(loginDto.getPassword(), authEntity.getPassword())) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid username or password");
         }
-
         String token = jwtService.generateToken(authEntity);
 
         return new LoginResponseDto(token);
