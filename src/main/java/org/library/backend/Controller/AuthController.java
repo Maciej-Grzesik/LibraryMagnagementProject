@@ -14,9 +14,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * AuthController class handles authentication-related endpoints such as registration and login
+ * It exposes endpoints for user registration and login, with appropriate access control based on user roles
+ */
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
+
     private final AuthService authService;
 
     @Autowired
@@ -24,6 +29,12 @@ public class AuthController {
         this.authService = authService;
     }
 
+    /**
+     * Endpoint for user registration
+     *
+     * @param requestBody the registration request body
+     * @return the ResponseEntity containing the registration response
+     */
     @PostMapping("/register")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<RegisterResponseDto> register(@RequestBody RegisterDto requestBody) {
@@ -31,6 +42,12 @@ public class AuthController {
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
     }
 
+    /**
+     * Endpoint for user login
+     *
+     * @param loginDto the login request body
+     * @return the ResponseEntity containing the login response
+     */
     @PostMapping("/login")
     @PreAuthorize("permitAll()")
     public ResponseEntity<LoginResponseDto> login(@RequestBody LoginDto loginDto) {

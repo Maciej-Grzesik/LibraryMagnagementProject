@@ -1,4 +1,4 @@
-package org.library.backend.Service.exceptions;
+package org.library.backend.Service.exceptions.AlreadyExists;
 
 public class UserAlreadyExistsException extends RuntimeException {
 

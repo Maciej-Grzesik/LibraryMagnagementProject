@@ -1,4 +1,4 @@
-package org.library.backend.Service.exceptions;
+package org.library.backend.Service.exceptions.NotFound;
 
 public class BookInfoNotFoundException extends RuntimeException{
     public BookInfoNotFoundException(Long id) {

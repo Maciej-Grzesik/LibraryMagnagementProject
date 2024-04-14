@@ -1,6 +1,5 @@
 package org.library.backend.Service;
 
-import jakarta.persistence.EntityNotFoundException;
 import org.library.backend.Controller.DTO.LoginDto;
 import org.library.backend.Controller.DTO.LoginResponseDto;
 import org.library.backend.Controller.DTO.RegisterDto;
@@ -9,17 +8,19 @@ import org.library.backend.Infrastructure.Entity.AuthEntity;
 import org.library.backend.Infrastructure.Entity.UserEntity;
 import org.library.backend.Infrastructure.Repository.AuthRepository;
 import org.library.backend.Infrastructure.Repository.UserRepository;
+import org.library.backend.Service.exceptions.AlreadyExists.UserAlreadyExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.library.backend.Service.exceptions.UserAlreadyExistsException;
 import org.springframework.web.server.ResponseStatusException;
-
 
 import java.util.Optional;
 
+/**
+ * AuthService class provides authentication-related services such as user registration and login
+ */
 @Service
 public class AuthService {
     private final AuthRepository authRepository;
@@ -35,6 +36,12 @@ public class AuthService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    /**
+     * Registers a new user with the provided registration details
+     *
+     * @param registerDto the registration details
+     * @return the response containing registration information
+     */
     public RegisterResponseDto register(RegisterDto registerDto) {
         Optional<AuthEntity> existingAuth = authRepository.findByUsername(registerDto.getUsername());
         if (existingAuth.isPresent()) {
@@ -54,6 +61,12 @@ public class AuthService {
         return new RegisterResponseDto(authEntity.getId(), authEntity.getUsername(), authEntity.getUserRole());
     }
 
+    /**
+     * Authenticates a user with the provided login details
+     *
+     * @param loginDto the login details
+     * @return the response containing authentication token
+     */
     public LoginResponseDto login(LoginDto loginDto) {
         AuthEntity authEntity = authRepository.findByUsername(loginDto.getUsername())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + loginDto.getUsername()));
