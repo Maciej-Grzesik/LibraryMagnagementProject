@@ -25,11 +25,11 @@ function Login() {
   );
 
   return (
-    <div className="h-screen flex items-center justify-center transform scale-125 bg-gray-light">
+    <div className="h-screen flex items-center justify-center bg-gray-light">
       <Formik initialValues={initialValues} onSubmit={onSubmit} validationSchema={validationSchema}>
         {formik => (
-          <Form className="bg-white shadow-xl rounded-lg px-8 pt-6 pb-8 mb-4 bg-opacity-100">
-            <div className="mb-4">
+          <Form className="bg-white shadow-xl rounded-lg px-8 pt-6 pb-8 mb-4 bg-opacity-100 transform scale-125">
+            <div className="mb-4 ">
               <label
                 className="block text-gray-700 text-sm font-bold mb-2 text-left"
                 htmlFor="username"

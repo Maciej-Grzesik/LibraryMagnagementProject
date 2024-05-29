@@ -4,6 +4,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import { Button } from '@mui/material';
+import Navbar from '../navbar/navbar';
 
 function LoanTable() {
   const [filterText, setFilterText] = useState('');
@@ -54,7 +55,8 @@ function LoanTable() {
     });
 
   return (
-    <div className="h-screen flex flex-col justify-center items-center">
+    <div className="h-screen flex flex-col justify-center items-center bg-gray-light">
+      <Navbar/>
       <div className="mx-auto w-11/12 flex flex-row relative">
         <div className="relative flex items-center text-gray-400 focus-within:text-gray-600">
           <SearchIcon className="w-5 h-5 absolute ml-3 pointer-events-none"></SearchIcon>
