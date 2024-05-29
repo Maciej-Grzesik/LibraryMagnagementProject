@@ -1,0 +1,30 @@
+[
+  {
+    "book" : "Test1",
+    "user" : "User1",
+    "loan_date" : "16.05.2024",
+    "due_date" : "16.06.2024",
+    "return_date": ""
+  },
+  {
+    "book" : "Test2",
+    "user" : "User2",
+    "loan_date" : "16.05.2024",
+    "due_date" : "16.06.2024",
+    "return_date": ""
+  },
+  {
+    "book" : "Test3",
+    "user" : "User4",
+    "loan_date" : "16.05.2024",
+    "due_date" : "16.06.2024",
+    "return_date": ""
+  },
+  {
+    "book" : "Test5",
+    "user" : "User5",
+    "loan_date" : "16.05.2024",
+    "due_date" : "16.06.2024",
+    "return_date": "17.06.2024"
+  }
+]

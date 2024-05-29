@@ -9,12 +9,16 @@ module.exports = {
         blue: {
           'facebook': '#3b5998',
           'light': '#8b9dc3',
+          'light-opacity-50': 'rgba(139, 157, 195, 0.3)' 
         },
         gray: {
           'light': '#dfe3ee',
           'very-light': '#f7f7f7',
         },
         white: '#ffffff',
+        red: {
+          'light-opacity-50': 'rgba(239, 68, 68, 0.3)'
+        },
       },
     },
   },
