@@ -32,7 +32,7 @@ public class BookService {
     public List<GetBookDto> getAll() {
         var books = bookRepository.findAll();
 
-        return books.stream().map((book) -> new GetBookDto(book.getId(), book.getIsbn(), book.getTitle(), book.getAuthor(), book.getPublisher(), book.getPublishYear(), book.getAvailableCopies() > 0)).collect(Collectors.toList());
+        return books.stream().map((book) -> new GetBookDto(book.getId(), book.getIsbn(), book.getTitle(), book.getAuthor(), book.getPublisher(), book.getPublishYear(), book.getAvailableCopies())).collect(Collectors.toList());
     }
 
     /**
@@ -45,7 +45,7 @@ public class BookService {
     public GetBookDto getBookById(long id) {
         var book = bookRepository.findById(id)
                 .orElseThrow(() -> new BookNotFoundException(id));
-        return new GetBookDto(book.getId(), book.getIsbn(), book.getTitle(), book.getAuthor(), book.getPublisher(), book.getPublishYear(), book.getAvailableCopies() > 0);
+        return new GetBookDto(book.getId(), book.getIsbn(), book.getTitle(), book.getAuthor(), book.getPublisher(), book.getPublishYear(), book.getAvailableCopies());
     }
 
     /**

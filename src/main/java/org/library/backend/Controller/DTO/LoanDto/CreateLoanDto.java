@@ -11,6 +11,7 @@ public class CreateLoanDto {
     public CreateLoanDto() {
     }
 
+
     public CreateLoanDto(long bookId, long userId, Date loanDate, Date dueDate) {
         this.bookId = bookId;
         this.userId = userId;

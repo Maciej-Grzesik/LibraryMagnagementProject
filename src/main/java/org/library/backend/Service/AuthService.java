@@ -9,6 +9,7 @@ import org.library.backend.Infrastructure.Entity.UserEntity;
 import org.library.backend.Infrastructure.Repository.AuthRepository;
 import org.library.backend.Infrastructure.Repository.UserRepository;
 import org.library.backend.Service.exceptions.AlreadyExists.UserAlreadyExistsException;
+import org.library.backend.commonTypes.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -50,7 +51,7 @@ public class AuthService {
         }
         UserEntity userEntity = new UserEntity();
         userEntity.setEmail(registerDto.getEmail());
-        userEntity.setFullUsername("Placeholder");
+        userEntity.setFullUsername(registerDto.getUsername());
         UserEntity createdUser = userRepository.save(userEntity);
 
         AuthEntity authEntity = new AuthEntity();
@@ -77,7 +78,8 @@ public class AuthService {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid username or password");
         }
         String token = jwtService.generateToken(authEntity);
-
-        return new LoginResponseDto(token);
+        String username = loginDto.getUsername();
+        UserRole userRole = authEntity.getUserRole();
+        return new LoginResponseDto(token, username, userRole);
     }
 }

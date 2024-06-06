@@ -3,6 +3,7 @@ package org.library.backend.Controller;
 import org.library.backend.Controller.DTO.BookDto.CreateBookDto;
 import org.library.backend.Controller.DTO.BookDto.CreateBookResponseDto;
 import org.library.backend.Controller.DTO.BookDto.GetBookDto;
+import org.library.backend.Infrastructure.Entity.BookEntity;
 import org.library.backend.Service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,6 +35,9 @@ public class BookController {
      */
     @GetMapping("/getAll")
     public List<GetBookDto> getAllBooks() {
+        for (GetBookDto book: bookService.getAll()) {
+            book.getAvailableCopies();
+        }
         return bookService.getAll();
     }
 

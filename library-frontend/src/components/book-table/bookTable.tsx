@@ -1,53 +1,77 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import mockData from './MockData.json';
 import SearchIcon from '@mui/icons-material/Search';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import Navbar from '../navbar/navbar';
+import { GetBookDTO } from '../api/dto/book.dto';
+import { useApi } from '../api/ApiProvider';
+import AddBookModal from './BookModal';
+
 
 function BookTable() {
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [books, setBooks] = useState<GetBookDTO[]>([]);
   const [filterText, setFilterText] = useState('');
   const [page, setPage] = useState(1);
-  const itemsPerPage = 5; 
+  const itemsPerPage = 5;
+
+  const apiClient = useApi();
+
+  useEffect(() => {
+    const getBooks = async () => {
+      const response = await apiClient.getBooks();
+      if (response.success && response.data) {
+        setBooks(response.data)
+      }
+    }
+
+    getBooks()
+
+    if (!isModalOpen) {
+      getBooks();
+    }
+  }, [apiClient, isModalOpen])
 
   const handleChangePage = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
   };
 
-  const filteredData = mockData.filter(
-    (info) =>
-      info.title.toLowerCase().includes(filterText.toLowerCase()) ||
-      info.author.toLowerCase().includes(filterText.toLowerCase()) ||
-      info.isbn.toLowerCase().includes(filterText.toLowerCase()) ||
-      info.publisher.toLowerCase().includes(filterText.toLowerCase()),
+  const filteredData = books.filter(
+    (book) =>
+      book.title?.toLowerCase().includes(filterText.toLowerCase()) ||
+      book.author?.toLowerCase().includes(filterText.toLowerCase()) ||
+      book.isbn?.toLowerCase().includes(filterText.toLowerCase()) ||
+      book.publisher?.toLowerCase().includes(filterText.toLowerCase()),
   );
 
   const displayData = filteredData
     .slice((page - 1) * itemsPerPage, page * itemsPerPage)
-    .map((info, index) => {
+    .map((book, index) => {
+      const isAvailable = book.availableCopies !== undefined && book.availableCopies > 0;
       return (
         <tr
           key={index}
-          className={`${info.availableCopies === 0 ? 'bg-red-light-opacity-50' : index % 2 === 0 ? 'bg-blue-light-opacity-50' : 'bg-white'} 
+          className={`${!isAvailable ? 'bg-red-light-opacity-50' : index % 2 === 0 ? 'bg-blue-light-opacity-50' : 'bg-white'} 
         shadow-md hover:scale-105 ease-in-out duration-500 h-10 hover:cursor-pointer break-all`}
         >
           <td className="pl-3 rounded-l-md border-l border-t border-b border-gray-700 border-opacity-30 ">
-            {info.title}
+            {book.title}
           </td>
           <td className="border-t border-b border-gray-700 border-opacity-30">
-            {info.author}
+            {book.author}
           </td>
           <td className="border-t border-b border-gray-700 border-opacity-30">
-            {info.isbn}
+            {book.isbn}
           </td>
           <td className="border-t border-b border-gray-700 border-opacity-30 text-center">
-            {info.publishYear}
+            {book.publishYear}
           </td>
           <td className="border-t border-b border-gray-700 border-opacity-30">
-            {info.publisher}
+            {book.publisher}
           </td>
           <td className="rounded-r-md border-r border-t border-b border-gray-700 border-opacity-30 text-center">
-            {info.availableCopies}
+            {book.availableCopies}
           </td>
         </tr>
       );
@@ -56,7 +80,7 @@ function BookTable() {
   return (
     <div className="h-screen flex flex-col justify-center items-center bg-gray-light">
       <Navbar/>
-      <div className="mx-auto w-11/12 ">
+      <div className="mx-auto w-11/12 flex flex-row relative">
         <div className="relative flex items-center text-gray-400 focus-within:text-gray-600">
           <SearchIcon className="w-5 h-5 absolute ml-3 pointer-events-none"></SearchIcon>
           <input
@@ -67,6 +91,16 @@ function BookTable() {
             value={filterText}
             onChange={(e) => setFilterText(e.target.value)}
           />
+        </div>
+        <div className="absolute -right-2 ">
+          <button 
+            className="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800"
+            onClick={() => setIsModalOpen(true)}
+          >
+            <span className="relative px-5 py-2.5 transition-all text-blue-facebook ease-in duration-75 bg-white dark:white rounded-md group-hover:bg-opacity-0 hover:text-white">
+              Add New Book
+            </span>
+          </button>
         </div>
       </div>
       <table className="table-auto w-11/12 border-separate border-spacing-y-3 text-left ">
@@ -91,6 +125,11 @@ function BookTable() {
           shape="rounded"
         />
       </Stack>
+      {isModalOpen && (
+        <AddBookModal
+          onClose={() => setIsModalOpen(false)}
+        />
+      )}
     </div>
   );
 }

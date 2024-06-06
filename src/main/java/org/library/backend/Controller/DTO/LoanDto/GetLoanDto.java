@@ -1,42 +1,40 @@
 package org.library.backend.Controller.DTO.LoanDto;
 
-import org.library.backend.Infrastructure.Entity.BookEntity;
-import org.library.backend.Infrastructure.Entity.UserEntity;
-
 import java.util.Date;
 
 public class GetLoanDto {
-    private BookEntity book;
-    private UserEntity user;
+    private String title;
+    private String username;
     private Date loanDate;
     private Date dueDate;
     private Date returnDate;
 
-    public GetLoanDto(BookEntity book, UserEntity user, Date loanDate, Date dueDate, Date returnDate) {
-        this.book = book;
-        this.user = user;
+
+    public GetLoanDto() {
+    }
+
+    public GetLoanDto(String title, String user, Date loanDate, Date dueDate, Date returnDate) {
+        this.title = title;
+        this.username = user;
         this.loanDate = loanDate;
         this.dueDate = dueDate;
         this.returnDate = returnDate;
     }
 
-    public GetLoanDto() {
+    public String getTitle() {
+        return title;
     }
 
-    public BookEntity getBook() {
-        return book;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public void setBook(BookEntity book) {
-        this.book = book;
+    public String getUsername() {
+        return username;
     }
 
-    public UserEntity getUser() {
-        return user;
-    }
-
-    public void setUser(UserEntity user) {
-        this.user = user;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public Date getLoanDate() {

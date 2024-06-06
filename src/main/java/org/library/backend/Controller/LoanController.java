@@ -45,8 +45,13 @@ public class LoanController {
      * @return the list of GetLoanDto representing all loans of the user
      */
     @GetMapping("/getAllByUser/{id}")
-    public List<GetLoanDto> getAllLoans(@PathVariable long id) {
+    public List<GetLoanDto> getAllLoansByUser(@PathVariable long id) {
         return loanService.getAllLoansByUserId(id);
+    }
+
+    @GetMapping("/getAll")
+    public List<GetLoanDto> getAllLoans() {
+        return loanService.getAllLoans();
     }
 
     /**

@@ -27,11 +27,20 @@ function Navbar() {
               <li>
                 <a
                   href="home"
-                  className="block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:p-0"
+                  className="block py-2 px-3 text-white  rounded md:bg-transparent md:p-0"
                   aria-current="page"
                 >
                   Home
                 </a>
+              </li>
+              <li>
+                <a
+                  href='add_user'
+                  className='block py-2 px-3 text-white  rounded md:bg-transparent md:p-0'
+                  aria-current='page'
+                  >
+                    Add user
+                  </a>
               </li>
               <li>
                 <a
