@@ -3,8 +3,10 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as yup from 'yup';
 import { useNavigate } from 'react-router-dom';
 import { useApi } from '../api/ApiProvider';
+import { useTranslation } from 'react-i18next';
 
 function Login() {
+  const {t, i18n} = useTranslation();
   const navigate = useNavigate();
   const apiClient = useApi();
 
@@ -16,9 +18,7 @@ function Login() {
   const onSubmit = useCallback(
     (values: { username: string; password: string }, formik: any) => {
       apiClient.login(values).then((response) => {
-        if (response.success && response.data && response.data.username &&  response.data.userRole) {
-          sessionStorage.setItem('username', response.data.username)
-          sessionStorage.setItem('userRole', response.data.userRole.toString())
+        if (response.success) {
           navigate('/home');
         } else {
           formik.setFieldError('username', 'Invalid username or password')
@@ -31,8 +31,8 @@ function Login() {
   const validationSchema = useMemo(
     () =>
       yup.object().shape({
-        username: yup.string().required('Username is required'),
-        password: yup.string().required('Password is required').min(5),
+        username: yup.string().required(t('username_error_msg')),
+        password: yup.string().required(t('password_error_msg')).min(5, t('min_pass')),
       }),
     [],
   );
@@ -47,7 +47,7 @@ function Login() {
                 className="block text-gray-700 text-sm font-bold mb-2 text-left"
                 htmlFor="username"
               >
-                Username
+                {t('username')}
               </label>
               <Field
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -63,7 +63,7 @@ function Login() {
                 className="block text-gray-700 text-left text-sm font-bold mb-2"
                 htmlFor="password"
               >
-                Password
+                {t('password')}
               </label>
               <Field
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
@@ -80,13 +80,13 @@ function Login() {
                 type="submit"
                 disabled={!formik.isValid || formik.isSubmitting}
               >
-                Sign In
+                {t('sign_in')}
               </button>
               <a
                 className="block ml-8 align-baseline font-bold text-sm text-blue-light hover:text-blue-facebook"
                 href="#"
               >
-                Forgot Password? 
+                {t('forgot_password')}
               </a>
             </div>
           </Form>
