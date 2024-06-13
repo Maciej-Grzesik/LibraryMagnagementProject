@@ -1,10 +1,13 @@
 import { LibraryClient } from "./apis";
-import { useContext, createContext } from "react";
+import { useContext, createContext, useState } from "react";
 
 const ApiContext = createContext(new LibraryClient());
 
-export default function ApiProvider({ children }: {children: React.ReactNode}) {
-    const apiClient = new LibraryClient();
+export default function ApiProvider({ 
+    children
+}: {
+    children: React.ReactNode}) {
+    const [apiClient] = useState(new LibraryClient());
 
     return (
         <ApiContext.Provider value = {apiClient}> {children}</ApiContext.Provider>

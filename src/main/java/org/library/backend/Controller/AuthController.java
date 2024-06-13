@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/api/auth")
+@PreAuthorize("hasRole('ADMIN')")
 public class AuthController {
 
     private final AuthService authService;
@@ -36,9 +37,7 @@ public class AuthController {
      * @return the ResponseEntity containing the registration response
      */
     @PostMapping("/register")
-    @PreAuthorize("permitAll()")
     public ResponseEntity<RegisterResponseDto> register(@RequestBody RegisterDto requestBody) {
-        System.out.println("Received registration request: " + requestBody.toString());
         RegisterResponseDto responseDto = authService.register(requestBody);
 
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED);

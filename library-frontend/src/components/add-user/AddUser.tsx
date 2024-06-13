@@ -5,8 +5,10 @@ import { useNavigate } from 'react-router-dom';
 import { useApi } from '../api/ApiProvider';
 import { UserRole } from '../api/dto/login.dto';
 import Navbar from '../navbar/navbar';
+import { useTranslation } from 'react-i18next';
 
 function AddUser() {
+  const { t, i18n} = useTranslation();
   const navigate = useNavigate();
   const apiClient = useApi();
 
@@ -49,7 +51,6 @@ function AddUser() {
 
   return (
     <div className="h-screen flex items-center justify-center bg-gray-light">
-      <Navbar/>
       <Formik initialValues={initialValues} onSubmit={onSubmit} validationSchema={validationSchema}>
         {formik => (
           <Form className="bg-white shadow-xl rounded-lg px-8 pt-6 pb-8 mb-4 bg-opacity-100 transform scale-125">
@@ -58,7 +59,7 @@ function AddUser() {
                 className="block text-gray-700 text-sm font-bold mb-2 text-left"
                 htmlFor="username"
               >
-                Username
+                {t('username')}
               </label>
               <Field
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -74,7 +75,7 @@ function AddUser() {
                 className="block text-gray-700 text-left text-sm font-bold mb-2"
                 htmlFor="password"
               >
-                Password
+                {t('password')}
               </label>
               <Field
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
@@ -90,7 +91,7 @@ function AddUser() {
                 className="block text-gray-700 text-left text-sm font-bold mb-2"
                 htmlFor="role"
               >
-                Role
+                {t('role')}
               </label>
               <Field
                 as="select"
@@ -125,7 +126,7 @@ function AddUser() {
                 type="submit"
                 disabled={!formik.isValid || formik.isSubmitting}
               >
-                Add User
+                {t('add_user')}
               </button>
             </div>
           </Form>

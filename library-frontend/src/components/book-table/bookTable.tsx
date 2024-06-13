@@ -7,9 +7,11 @@ import Navbar from '../navbar/navbar';
 import { GetBookDTO } from '../api/dto/book.dto';
 import { useApi } from '../api/ApiProvider';
 import AddBookModal from './BookModal';
+import { useTranslation } from 'react-i18next';
 
 
 function BookTable() {
+  const { t, i18n} = useTranslation();
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [books, setBooks] = useState<GetBookDTO[]>([]);
   const [filterText, setFilterText] = useState('');
@@ -79,14 +81,13 @@ function BookTable() {
 
   return (
     <div className="h-screen flex flex-col justify-center items-center bg-gray-light">
-      <Navbar/>
       <div className="mx-auto w-11/12 flex flex-row relative">
         <div className="relative flex items-center text-gray-400 focus-within:text-gray-600">
           <SearchIcon className="w-5 h-5 absolute ml-3 pointer-events-none"></SearchIcon>
           <input
             className="pr-3 pl-10 py-2 font-semibold placeholder-gray-500 text-black rounded-xl border-none ring-2 ring-gray-300 focus:ring-gray-500 focus:ring-2"
             type="text"
-            placeholder="Search..."
+            placeholder={t('search')}
             autoComplete="off"
             value={filterText}
             onChange={(e) => setFilterText(e.target.value)}
@@ -98,7 +99,7 @@ function BookTable() {
             onClick={() => setIsModalOpen(true)}
           >
             <span className="relative px-5 py-2.5 transition-all text-blue-facebook ease-in duration-75 bg-white dark:white rounded-md group-hover:bg-opacity-0 hover:text-white">
-              Add New Book
+              {t('add_new_book')}
             </span>
           </button>
         </div>
@@ -106,12 +107,12 @@ function BookTable() {
       <table className="table-auto w-11/12 border-separate border-spacing-y-3 text-left ">
         <thead className="bg-blue-facebook h-14 shadow-md text-white">
           <tr>
-            <th className="rounded-l-md pl-3 w-60">Title</th>
-            <th className="w-40">Author</th>
+            <th className="rounded-l-md pl-3 w-60">{t('title')}</th>
+            <th className="w-40">{t('author')}</th>
             <th className="w-32">ISBN</th>
-            <th className="w-32 text-center">Year of publish</th>
-            <th>Publisher</th>
-            <th className="rounded-r-md text-center">Available copies</th>
+            <th className="w-32 text-center">{t('year_of_publish')}</th>
+            <th>{t('publisher')}</th>
+            <th className="rounded-r-md text-center">{t('available_copies')}</th>
           </tr>
         </thead>
         <tbody className="text-left">{displayData}</tbody>
