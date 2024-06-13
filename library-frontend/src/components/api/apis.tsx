@@ -14,6 +14,7 @@ export class LibraryClient {
     private client: AxiosInstance;
 
     constructor() {
+        console.log("nowy obiekt");
         this.client = axios.create({
             baseURL: 'http://localhost:8080/api',
         });
@@ -21,7 +22,7 @@ export class LibraryClient {
     public async login(data: LoginDto): Promise<ClientResponse<LoginResponseDto | null>> {
         try {
             const response: AxiosResponse<LoginResponseDto> = await this.client.post('/auth/login', data);
-            console.log(response.data)
+            console.log(response.data) // dodac header
 
             return {
                 success: true,

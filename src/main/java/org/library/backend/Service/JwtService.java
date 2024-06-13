@@ -21,7 +21,7 @@ import java.util.function.Function;
 @Service
 public class JwtService {
 
-    private long tokenLifeTime = 1000 * 60 * 24; // 24 hours
+    private long tokenLifeTime = 1000 * 60 * 24;
 
     @Value("${token.signing.key}")
     private String jwtSignInKey;
