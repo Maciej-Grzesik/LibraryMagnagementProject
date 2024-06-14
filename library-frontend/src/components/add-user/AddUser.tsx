@@ -8,7 +8,7 @@ import Navbar from '../navbar/navbar';
 import { useTranslation } from 'react-i18next';
 
 function AddUser() {
-  const { t, i18n} = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const apiClient = useApi();
 
@@ -29,7 +29,7 @@ function AddUser() {
             role: UserRole.ROLE_READER,
             email: ''
           };
-        
+
         } else {
           formik.setFieldError('username', 'Error adding user');
         }
@@ -122,7 +122,7 @@ function AddUser() {
             </div>
             <div className="flex items-center justify-between">
               <button
-                className="bg-blue-light hover:bg-blue-facebook hover:scale-110 duration-200 ease-in-out text-white font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline"
+                className="w-full bg-blue-light hover:bg-blue-facebook hover:scale-110 duration-200 ease-in-out text-white font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline"
                 type="submit"
                 disabled={!formik.isValid || formik.isSubmitting}
               >

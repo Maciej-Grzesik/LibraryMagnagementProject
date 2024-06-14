@@ -2,8 +2,9 @@ import axios, { AxiosError, AxiosInstance, AxiosResponse } from "axios";
 import { LoginDto, LoginResponseDto } from "./dto/login.dto";
 import { CreateBookDTO, GetBookDTO, ResponseBookDTO } from "./dto/book.dto";
 import { CreateUserDTO, ResponseUserDTO } from "./dto/user.dto";
-import { GetLoanDTO, CreateLoanDTO, ResponseLoanDTO } from "./dto/loan.dto";
+import { GetLoanDTO, CreateLoanDTO, ResponseLoanDTO, UpdateLoanDTO } from "./dto/loan.dto";
 import { jwtDecode } from "jwt-decode";
+import { GetBookInfoDTO, CreateBookInfoDTO } from "./dto/book.info.dto";
 
 export type ClientResponse<T> = {
     success: boolean,
@@ -22,7 +23,6 @@ export class LibraryClient {
     private username: String = '';
 
     constructor() {
-        console.log("nowy!!:DDD")
         this.client = axios.create({
             baseURL: 'http://localhost:8080/api',
         });
@@ -124,7 +124,6 @@ export class LibraryClient {
 
     public async addUser(data: CreateUserDTO): Promise<ClientResponse<ResponseUserDTO | null>> {
         try {
-            console.log(this.client.defaults)
             const response = await this.client.post('/auth/register', data);
 
             return {
@@ -162,6 +161,44 @@ export class LibraryClient {
         }
     }
 
+    public async getLoan(loanId: number): Promise<ClientResponse<GetLoanDTO | null>> {
+        try {
+            const response = await this.client.get<GetLoanDTO>(`/loan/getById${loanId}`);
+            return {
+                success: true,
+                data: response.data,
+                statusCode: response.status,
+            }
+        } catch (error) {
+            const axiosError = error as AxiosError<Error>;
+
+            return {
+                success: false,
+                data: null,
+                statusCode: axiosError.response?.status || 0,
+            }
+        }
+    }
+
+    public async updateLoan(uptadedLoan: UpdateLoanDTO): Promise<ClientResponse<GetLoanDTO | null>> {
+        try {
+            const response = await this.client.put(`/loan/update`, uptadedLoan);
+            return {
+                success: true,
+                data: response.data,
+                statusCode: response.status,
+            }
+        } catch (error) {
+            const axiosError = error as AxiosError<Error>;
+
+            return {
+                success: false,
+                data: null,
+                statusCode: axiosError.response?.status || 0,
+            }
+        }
+    }
+
     public async addLoan(data: CreateLoanDTO): Promise<ClientResponse<ResponseLoanDTO | null>> {
         try {
             const response = await this.client.post('/loan/create', data);
@@ -173,6 +210,43 @@ export class LibraryClient {
         } catch (error) {
             const axiosError = error as AxiosError<Error>;
 
+            return {
+                success: false,
+                data: null,
+                statusCode: axiosError.response?.status || 0,
+            }
+        }
+    }
+
+    public async getBookInfo(id: number): Promise<ClientResponse<GetBookInfoDTO | null>> {
+        try {
+            const response = await this.client.get(`/info/${id}`);
+            console.log(response.data)
+            return {
+                success: true,
+                data: response.data,
+                statusCode: response.status
+            }
+        } catch (error) {
+            const axiosError = error as AxiosError<Error>;
+            return {
+                success: false,
+                data: null,
+                statusCode: axiosError.response?.status || 0,
+            }
+        }
+    }
+
+    public async addBookInfo(data: CreateBookInfoDTO): Promise<ClientResponse<CreateBookInfoDTO | null>> {
+        try {
+            const response = await this.client.post(`/info/create`, data);
+            return {
+                success: true,
+                data: response.data,
+                statusCode: response.status
+            }
+        } catch (error) {
+            const axiosError = error as AxiosError<Error>;
             return {
                 success: false,
                 data: null,

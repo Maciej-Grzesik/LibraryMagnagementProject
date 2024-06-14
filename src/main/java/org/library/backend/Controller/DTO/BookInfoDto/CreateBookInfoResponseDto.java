@@ -3,20 +3,47 @@ package org.library.backend.Controller.DTO.BookInfoDto;
 import org.library.backend.Infrastructure.Entity.BookEntity;
 
 public class CreateBookInfoResponseDto {
-    private BookEntity book;
+    private long bookId;
+    private String genre;
+    private String summary;
+    private String imgURL;
 
-    public CreateBookInfoResponseDto(BookEntity book) {
-        this.book = book;
+    public CreateBookInfoResponseDto(long bookId, String genre, String summary, String imgURL) {
+        this.bookId = bookId;
+        this.genre = genre;
+        this.summary = summary;
+        this.imgURL = imgURL;
     }
 
-    public CreateBookInfoResponseDto() {
+    public long getBookId() {
+        return bookId;
     }
 
-    public BookEntity getBook() {
-        return book;
+    public void setBookId(long bookId) {
+        this.bookId = bookId;
     }
 
-    public void setBook(BookEntity book) {
-        this.book = book;
+    public String getGenre() {
+        return genre;
+    }
+
+    public void setGenre(String genre) {
+        this.genre = genre;
+    }
+
+    public String getSummary() {
+        return summary;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
+    }
+
+    public String getImgURL() {
+        return imgURL;
+    }
+
+    public void setImgURL(String imgURL) {
+        this.imgURL = imgURL;
     }
 }

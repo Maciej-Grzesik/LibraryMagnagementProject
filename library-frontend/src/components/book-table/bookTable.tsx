@@ -7,13 +7,19 @@ import Navbar from '../navbar/navbar';
 import { GetBookDTO } from '../api/dto/book.dto';
 import { useApi } from '../api/ApiProvider';
 import AddBookModal from './BookModal';
+import BookInfoModal from './BookInfoModal';
 import { useTranslation } from 'react-i18next';
 
 
 function BookTable() {
   const { t, i18n} = useTranslation();
-  const [isModalOpen, setIsModalOpen] = useState(false)
+ 
   const [books, setBooks] = useState<GetBookDTO[]>([]);
+  const [selectedBook, setSelectedBook] = useState<GetBookDTO>();
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isBookInfoOpen, setBookInfoOpen] = useState(false);
+
   const [filterText, setFilterText] = useState('');
   const [page, setPage] = useState(1);
   const itemsPerPage = 5;
@@ -24,7 +30,7 @@ function BookTable() {
     const getBooks = async () => {
       const response = await apiClient.getBooks();
       if (response.success && response.data) {
-        setBooks(response.data)
+        setBooks(response.data);
       }
     }
 
@@ -33,11 +39,16 @@ function BookTable() {
     if (!isModalOpen) {
       getBooks();
     }
-  }, [apiClient, isModalOpen])
+  }, [apiClient, isModalOpen, isBookInfoOpen])
 
   const handleChangePage = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
   };
+
+  const handleRowClick = (book: GetBookDTO) => {
+    setSelectedBook(book);
+    setBookInfoOpen(true);
+  }
 
   const filteredData = books.filter(
     (book) =>
@@ -55,7 +66,8 @@ function BookTable() {
         <tr
           key={index}
           className={`${!isAvailable ? 'bg-red-light-opacity-50' : index % 2 === 0 ? 'bg-blue-light-opacity-50' : 'bg-white'} 
-        shadow-md hover:scale-105 ease-in-out duration-500 h-10 hover:cursor-pointer break-all`}
+          shadow-md hover:scale-105 ease-in-out duration-500 h-10 hover:cursor-pointer break-all`}
+          onClick={() => handleRowClick(book)}
         >
           <td className="pl-3 rounded-l-md border-l border-t border-b border-gray-700 border-opacity-30 ">
             {book.title}
@@ -80,7 +92,8 @@ function BookTable() {
     });
 
   return (
-    <div className="h-screen flex flex-col justify-center items-center bg-gray-light">
+    <div className='h-screen bg-gray-light'>
+    <div className=" flex flex-col justify-center items-center pt-32">
       <div className="mx-auto w-11/12 flex flex-row relative">
         <div className="relative flex items-center text-gray-400 focus-within:text-gray-600">
           <SearchIcon className="w-5 h-5 absolute ml-3 pointer-events-none"></SearchIcon>
@@ -95,7 +108,7 @@ function BookTable() {
         </div>
         <div className="absolute -right-2 ">
           <button 
-            className="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800"
+            className="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white duration-200 ease-in-out dark:text-white hover:scale-105 active:scale-95"
             onClick={() => setIsModalOpen(true)}
           >
             <span className="relative px-5 py-2.5 transition-all text-blue-facebook ease-in duration-75 bg-white dark:white rounded-md group-hover:bg-opacity-0 hover:text-white">
@@ -131,6 +144,13 @@ function BookTable() {
           onClose={() => setIsModalOpen(false)}
         />
       )}
+      {isBookInfoOpen && (
+        <BookInfoModal
+          book={selectedBook}
+          onClose={() => setBookInfoOpen(false)}
+        />
+      )}
+    </div>
     </div>
   );
 }

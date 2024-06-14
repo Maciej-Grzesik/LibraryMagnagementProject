@@ -6,6 +6,7 @@ export class CreateLoanDTO {
 }
 
 export class GetLoanDTO {
+    id: number | undefined;
     title: string | undefined;
     username: string | undefined;
     loanDate: string | undefined;
@@ -17,4 +18,9 @@ export class GetLoanDTO {
 export class ResponseLoanDTO {
     bookId: number | undefined
     dueDate: string | undefined
+}
+
+export class UpdateLoanDTO {
+    loanId: number | undefined
+    returnDate: string | undefined
 }

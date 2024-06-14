@@ -33,5 +33,8 @@
   "loan_date": "Data wypożyczenia",
   "due_date": "Data do zwrotu",
   "return_date": "Data zwrotu",
-  "add_new_loan": "Dodaj nowe wypożyczenie"
+  "add_new_loan": "Dodaj nowe wypożyczenie",
+  "genre": "Gatunek",
+  "summary": "Opis",
+  "imgURL": "Adres URL okładki"
 }

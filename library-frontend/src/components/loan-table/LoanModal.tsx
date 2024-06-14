@@ -44,7 +44,10 @@ const AddLoanModal: React.FC<AddLoanModalProps> = ({ onClose }) => {
 
   return (
     <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center">
-      <div className="bg-white p-6 rounded-md shadow-md w-1/3">
+      <div className="bg-white p-6 rounded-md shadow-md w-1/3"
+      style={{
+        animation: 'fade-down 0.7s'
+      }}>
       <div className='flex justify-between' >
         <h2 className="text-xl font-bold mb-4">{t('add_new_loan')}</h2>
         <button

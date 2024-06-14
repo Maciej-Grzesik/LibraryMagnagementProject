@@ -15,7 +15,10 @@ function Navbar() {
   };
 
   return (
-    <div className='fixed top-0 left-0 right-0'>
+    <div className='fixed top-0 left-0 right-0 z-40 shadow-xl'
+    style={{
+      animation: 'fade-down 1s'
+    }}>
       <nav className="bg-blue-facebook border-gray-2">
         <div className="w-11/12 flex items-center justify-between mx-auto py-5">
           <a

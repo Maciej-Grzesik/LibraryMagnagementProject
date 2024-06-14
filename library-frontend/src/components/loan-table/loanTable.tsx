@@ -7,11 +7,18 @@ import { useApi } from '../api/ApiProvider';
 import { GetLoanDTO } from '../api/dto/loan.dto';
 import AddLoanModal from './LoanModal';
 import { useTranslation } from 'react-i18next';
+import LoanInfoModal from './LoanInfoModal';
 
 function LoanTable() {
+  const apiClient = useApi();
   const { t, i18n} = useTranslation();
-  const [isModalOpen, setIsModalOpen] = useState(false)
+
   const [loans, setLoans] = useState<GetLoanDTO[]>([]);
+  const [selectedLoan, setSelectedLoan] = useState<GetLoanDTO>();
+  
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isLoanInfoOpen, setIsLoanInfoOpen] = useState(false);
+  
   const [filterText, setFilterText] = useState('');
   const [page, setPage] = useState(1);
   const itemsPerPage = 5;
@@ -23,7 +30,6 @@ function LoanTable() {
     setPage(value);
   };
   
-  const apiClient = useApi();
 
   useEffect(() => {
     const getLoans = async () => {
@@ -36,8 +42,15 @@ function LoanTable() {
 
     getLoans()
 
-    
-  }, [apiClient])
+    if (!isModalOpen) {
+      getLoans()
+    }
+  }, [apiClient, isModalOpen, isLoanInfoOpen])
+
+  const handleRowClick = (loan: GetLoanDTO) => {
+    setSelectedLoan(loan);
+    setIsLoanInfoOpen(true);
+  }
 
   const filteredData = loans.filter(
     (loan) =>
@@ -64,6 +77,7 @@ function LoanTable() {
         key={index}
         className={`${isOverdue ? 'bg-red-light-opacity-50' : index % 2 === 0 ? 'bg-blue-light-opacity-50' : 'bg-white'} 
         shadow-md hover:scale-105 ease-in-out duration-500 h-10 hover:cursor-pointer break-all`}
+        onClick={() => handleRowClick(loan)}
       >
         <td className="pl-3 rounded-l-md border-l border-t border-b border-gray-700 border-opacity-30 ">
           {loan.username}
@@ -86,7 +100,8 @@ function LoanTable() {
 
 
   return (
-    <div className="h-screen flex flex-col justify-center items-center bg-gray-light">
+    <div className='h-screen bg-gray-light'>
+    <div className=" flex flex-col justify-center items-center pt-32">
       <div className="mx-auto w-11/12 flex flex-row relative">
         <div className="relative flex items-center text-gray-400 focus-within:text-gray-600">
           <SearchIcon className="w-5 h-5 absolute ml-3 pointer-events-none"></SearchIcon>
@@ -101,7 +116,7 @@ function LoanTable() {
         </div>
         <div className="absolute -right-2">
           <button 
-            className="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800"
+            className="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group duration-200 ease-in-out hover:scale-105 active:scale-95 bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white "
             onClick={(e) => setIsModalOpen(true)}
             >
             <span className="relative px-5 py-2.5 transition-all text-blue-facebook ease-in duration-75 bg-white dark:white rounded-md group-hover:bg-opacity-0 hover:text-white">
@@ -136,6 +151,13 @@ function LoanTable() {
           onClose={() => setIsModalOpen(false)}
         />
       )}
+      {isLoanInfoOpen && (
+        <LoanInfoModal
+          loan={selectedLoan}
+          onClose={() => setIsLoanInfoOpen(false)}
+        />
+      )}
+    </div>
     </div>
   );
 }

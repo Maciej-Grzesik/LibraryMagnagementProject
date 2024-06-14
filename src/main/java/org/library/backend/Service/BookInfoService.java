@@ -59,7 +59,7 @@ public class BookInfoService {
 
         var newBookInfo = bookInfoRepository.save(bookInfoEntity);
 
-        return new CreateBookInfoResponseDto(newBookInfo.getBook());
+        return new CreateBookInfoResponseDto(newBookInfo.getBook().getId(), newBookInfo.getGenre(), newBookInfo.getSummary(), newBookInfo.getImgURL());
     }
 
     /**

@@ -83,7 +83,7 @@ function Login() {
                 {t('sign_in')}
               </button>
               <a
-                className="block ml-8 align-baseline font-bold text-sm text-blue-light hover:text-blue-facebook"
+                className="block ml-8 align-baseline font-bold text-sm text-blue-light hover:text-blue-facebook "
                 href="#"
               >
                 {t('forgot_password')}
