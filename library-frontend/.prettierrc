@@ -2,5 +2,7 @@
     "singleQuote": true,
     "tabWidth": 2,
     "useTabs": false,
-    "eslintIntegration": true
+    "eslintIntegration": true,
+    "semi": false,
+    "plugins": ["prettier-plugin-tailwindcss"]
 }

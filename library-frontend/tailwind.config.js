@@ -5,6 +5,16 @@ module.exports = {
   ],
   theme: {
     extend: {
+      keyframes: {
+        appear: {
+          "0%": {
+            opacity: "0",
+          },
+          "100%": {
+            opacity: "1",
+          },
+        },
+      },
       colors: {
         blue: {
           'facebook': '#3b5998',

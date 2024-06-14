@@ -22,7 +22,6 @@ export class LibraryClient {
     private username: String = '';
 
     constructor() {
-        console.log("nowy!!:DDD")
         this.client = axios.create({
             baseURL: 'http://localhost:8080/api',
         });

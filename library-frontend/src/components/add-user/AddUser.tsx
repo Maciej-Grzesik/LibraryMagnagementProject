@@ -122,7 +122,7 @@ function AddUser() {
             </div>
             <div className="flex items-center justify-between">
               <button
-                className="bg-blue-light hover:bg-blue-facebook hover:scale-110 duration-200 ease-in-out text-white font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline"
+                className="bg-blue-light w-full hover:bg-blue-facebook active:scale-105 hover:scale-110 duration-200 ease-in-out text-white font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline"
                 type="submit"
                 disabled={!formik.isValid || formik.isSubmitting}
               >
