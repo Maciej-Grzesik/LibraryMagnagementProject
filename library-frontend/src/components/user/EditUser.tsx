@@ -1,70 +1,72 @@
-import { useMemo, useCallback } from 'react';
+import React, { useMemo, useCallback } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as yup from 'yup';
-import { useNavigate } from 'react-router-dom';
 import { useApi } from '../api/ApiProvider';
 import { useTranslation } from 'react-i18next';
 
-function Login() {
+function EditUser() {
   const { t, i18n } = useTranslation();
-  const navigate = useNavigate();
+
   const apiClient = useApi();
 
   const initialValues = {
-    username: '',
-    password: '',
+    currentPassword: '',
+    newPassword: '',
   };
 
   const onSubmit = useCallback(
-    (values: { username: string; password: string }, formik: any) => {
-      apiClient.login(values).then((response) => {
+    (
+      values: {
+        currentPassword: string;
+        newPassword: string;
+      },
+      formik: any,
+    ) => {
+      apiClient.updateUser(values).then((response) => {
         if (response.success) {
-          navigate('/home');
         } else {
-          formik.setFieldError('username', 'Invalid username or password');
+          formik.setFieldError('username', 'Error adding user');
         }
       });
     },
-    [apiClient, navigate],
+    [apiClient],
   );
 
   const validationSchema = useMemo(
     () =>
       yup.object().shape({
-        username: yup.string().required(t('username_error_msg')),
-        password: yup
-          .string()
-          .required(t('password_error_msg'))
-          .min(5, t('min_pass')),
+        username: yup.string().required('Username is required'),
+        currentPassword: yup.string().required('Current password is required'),
+        newPassword: yup.string().required('New password is required').min(5),
       }),
     [],
   );
 
   return (
-    <div className="flex h-screen items-center justify-center bg-st-tropaz-100">
+    <div className="flex h-screen items-center justify-center bg-gray-light">
       <Formik
         initialValues={initialValues}
         onSubmit={onSubmit}
         validationSchema={validationSchema}
       >
         {(formik) => (
-          <Form className="mb-4 scale-125 transform rounded-lg bg-st-tropaz-50 bg-opacity-100 px-8 pb-8 pt-6 shadow-xl">
-            <div className="mb-4">
+          <Form className="mb-4 scale-125 transform rounded-lg bg-white bg-opacity-100 px-8 pb-8 pt-6 shadow-xl">
+            <div className="mb-6">
               <label
                 className="mb-2 block text-left text-sm font-bold text-gray-700"
-                htmlFor="username"
+                htmlFor="currentPassword"
               >
-                {t('username')}
+                {t('current_password')}
               </label>
               <Field
-                className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
-                id="username"
-                type="text"
-                name="username"
-                placeholder="Username"
+                className="focus:shadow-outline mb-3 w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
+                id="currentPassword"
+                type="password"
+                name="currentPassword"
+                placeholder="******************"
               />
               <ErrorMessage
-                name="username"
+                name="currentPassword"
                 component="div"
                 className="text-xs italic text-red-500"
               />
@@ -72,37 +74,31 @@ function Login() {
             <div className="mb-6">
               <label
                 className="mb-2 block text-left text-sm font-bold text-gray-700"
-                htmlFor="password"
+                htmlFor="newPassword"
               >
-                {t('password')}
+                {t('new_password')}
               </label>
               <Field
                 className="focus:shadow-outline mb-3 w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
-                id="password"
+                id="newPassword"
                 type="password"
-                name="password"
+                name="newPassword"
                 placeholder="******************"
               />
               <ErrorMessage
-                name="password"
+                name="newPassword"
                 component="div"
                 className="text-xs italic text-red-500"
               />
             </div>
             <div className="flex items-center justify-between">
               <button
-                className="focus:shadow-outline rounded bg-st-tropaz-400 px-6 py-2 font-bold text-white duration-200 ease-in-out hover:scale-110 hover:bg-blue-facebook focus:outline-none"
+                className="focus:shadow-outline w-full rounded bg-blue-light px-6 py-2 font-bold text-white duration-200 ease-in-out hover:scale-110 hover:bg-blue-facebook focus:outline-none"
                 type="submit"
                 disabled={!formik.isValid || formik.isSubmitting}
               >
-                {t('sign_in')}
+                {t('update_user')}
               </button>
-              <a
-                className="ml-8 block align-baseline text-sm font-bold text-st-tropaz-400 hover:text-blue-facebook hover:animate-wiggle"
-                href="#"
-              >
-                {t('forgot_password')}
-              </a>
             </div>
           </Form>
         )}
@@ -111,4 +107,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default EditUser;

@@ -18,5 +18,5 @@ public interface LoanRepository extends JpaRepository<LoanEntity, Long> {
      * @param userId the ID of the user
      * @return a list of LoanEntity objects associated with the given user ID
      */
-    List<LoanEntity> findAllByUserId(long userId);
+    List<LoanEntity> findAllByUserFullUsername(String username);
 }

@@ -50,11 +50,11 @@ public class LoanService {
     /**
      * Retrieves all loans DTOs by user ID
      *
-     * @param id the ID of the user
+     * @param username the username of the user
      * @return the list of GetLoanDto representing all loans of the user
      */
-    public List<GetLoanDto> getAllLoansByUserId(long id) {
-        var loans = loanRepository.findAllByUserId(id);
+    public List<GetLoanDto> getAllLoansByUsername(String username) {
+        var loans = loanRepository.findAllByUserFullUsername(username);
         return loans.stream().map((loan) -> new GetLoanDto(loan.getId(), loan.getBook().getTitle(), loan.getUser().getFullUsername(), loan.getLoanDate(), loan.getDueDate(), loan.getReturnDate())).collect(Collectors.toList());
     }
 

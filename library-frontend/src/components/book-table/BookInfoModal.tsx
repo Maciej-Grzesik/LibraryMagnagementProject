@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useMemo, useCallback } from "react";
-import { useTranslation } from "react-i18next";
-import { useApi } from "../api/ApiProvider";
-import { GetBookInfoDTO, CreateBookInfoDTO } from "../api/dto/book.info.dto";
-import { GetBookDTO } from "../api/dto/book.dto";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useApi } from '../api/ApiProvider';
+import { GetBookInfoDTO, CreateBookInfoDTO } from '../api/dto/book.info.dto';
+import { GetBookDTO } from '../api/dto/book.dto';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as yup from 'yup';
-import { SquarePen } from 'lucide-react'
+import { SquarePen } from 'lucide-react';
 
 interface BookInfoModalProps {
   onClose: () => void;
@@ -34,50 +34,50 @@ const BookInfoModal: React.FC<BookInfoModalProps> = ({ onClose, book }) => {
     bookId: book?.id || 0,
     genre: isEditing ? bookInfo?.genre || '' : '',
     summary: isEditing ? bookInfo?.summary || '' : '',
-    imgURL: isEditing ? bookInfo?.imgURL || '' : ''
+    imgURL: isEditing ? bookInfo?.imgURL || '' : '',
   };
 
-  const validationSchema = useMemo(() => 
-    yup.object().shape({
-      genre: yup.string().required(t('requiredField')),
-      summary: yup.string().required(t('requiredField')),
-      imgURL: yup.string().url(t('invalidURL'))
-    }), [t]
+  const validationSchema = useMemo(
+    () =>
+      yup.object().shape({
+        genre: yup.string().required(t('requiredField')),
+        summary: yup.string().required(t('requiredField')),
+        imgURL: yup.string().url(t('invalidURL')),
+      }),
+    [t],
   );
 
   const onSubmit = useCallback(
     (values: CreateBookInfoDTO, formik: any) => {
-        apiClient.addBookInfo(values).then((response) => {
-            if (response.success) {
-                
-            } else {
-                
-            }
-        });
+      apiClient.addBookInfo(values).then((response) => {
+        if (response.success) {
+        } else {
+        }
+      });
     },
     [apiClient],
   );
 
   return (
-    <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center "
-
-    >
-      <div className="relative bg-white p-6 rounded-md shadow-md w-1/3"
-               style={{
-                animation: 'fade-up 0.7s',
-                }}>
+    <div className="fixed inset-0 flex items-center justify-center bg-gray-600 bg-opacity-50">
+      <div
+        className="relative w-1/3 rounded-md bg-white p-6 shadow-md"
+        style={{
+          animation: 'fade-up 0.7s',
+        }}
+      >
         <div className="flex justify-between">
-          <div className="text-xl font-bold mb-4 flex flex-row">
+          <div className="mb-4 flex flex-row text-xl font-bold">
             {book?.title}
             <SquarePen
-                className="relative top-1"
-                size={22}
-                onClick={() => setIsEditing(prevState => !prevState)}
+              className="relative top-1"
+              size={22}
+              onClick={() => setIsEditing((prevState) => !prevState)}
             />
           </div>
           <button
             type="button"
-            className="text-gray-500 hover:text-gray-800 text-4xl relative -top-9 -right-5"
+            className="relative -right-5 -top-9 text-4xl text-gray-500 hover:text-gray-800"
             onClick={() => {
               onClose();
               setIsEditing(false);
@@ -99,14 +99,18 @@ const BookInfoModal: React.FC<BookInfoModalProps> = ({ onClose, book }) => {
                   <Field
                     type="text"
                     name="genre"
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
                   />
                 ) : (
-                  <div className="py-2 px-3 border border-gray-300 rounded">
+                  <div className="rounded border border-gray-300 px-3 py-2">
                     {bookInfo?.genre || '-'}
                   </div>
                 )}
-                <ErrorMessage name="genre" component="div" className="text-red-500" />
+                <ErrorMessage
+                  name="genre"
+                  component="div"
+                  className="text-red-500"
+                />
               </div>
               <div className="mb-2">
                 <label className="block text-gray-700">{t('summary')}</label>
@@ -114,14 +118,18 @@ const BookInfoModal: React.FC<BookInfoModalProps> = ({ onClose, book }) => {
                   <Field
                     as="textarea"
                     name="summary"
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
                   />
                 ) : (
-                  <div className="py-2 px-3 border border-gray-300 rounded">
+                  <div className="rounded border border-gray-300 px-3 py-2">
                     {bookInfo?.summary || '-'}
                   </div>
                 )}
-                <ErrorMessage name="summary" component="div" className="text-red-500" />
+                <ErrorMessage
+                  name="summary"
+                  component="div"
+                  className="text-red-500"
+                />
               </div>
               <div className="mb-2">
                 <label className="block text-gray-700">{t('imgURL')}</label>
@@ -129,26 +137,30 @@ const BookInfoModal: React.FC<BookInfoModalProps> = ({ onClose, book }) => {
                   <Field
                     type="text"
                     name="imgURL"
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
                   />
                 ) : (
-                  <div className="py-2 px-3 border border-gray-300 rounded">
+                  <div className="rounded border border-gray-300 px-3 py-2">
                     {bookInfo?.imgURL || '-'}
                   </div>
                 )}
-                <ErrorMessage name="imgURL" component="div" className="text-red-500" />
+                <ErrorMessage
+                  name="imgURL"
+                  component="div"
+                  className="text-red-500"
+                />
               </div>
-              <div className="flex justify-between mt-5">
+              <div className="mt-5 flex justify-between">
                 <button
                   type="button"
-                  className="bg-red-400 hover:bg-red-700 hover:scale-110 duration-200 ease-in-out text-white font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline"
+                  className="focus:shadow-outline rounded bg-red-400 px-6 py-2 font-bold text-white duration-200 ease-in-out hover:scale-110 hover:bg-red-700 focus:outline-none"
                   onClick={onClose}
                 >
                   {t('cancel')}
                 </button>
                 <button
                   type="submit"
-                  className="bg-blue-light hover:bg-blue-facebook hover:scale-110 duration-200 ease-in-out text-white font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline"
+                  className="focus:shadow-outline rounded bg-blue-light px-6 py-2 font-bold text-white duration-200 ease-in-out hover:scale-110 hover:bg-blue-facebook focus:outline-none"
                   disabled={!isValid || isSubmitting}
                 >
                   {t('add')}
