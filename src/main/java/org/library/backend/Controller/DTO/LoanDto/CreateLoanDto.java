@@ -3,36 +3,35 @@ package org.library.backend.Controller.DTO.LoanDto;
 import java.util.Date;
 
 public class CreateLoanDto {
-    private long bookId;
-    private long userId;
+    private String bookTitle;
+    private String username;
     private Date loanDate;
     private Date dueDate;
 
     public CreateLoanDto() {
     }
 
-
-    public CreateLoanDto(long bookId, long userId, Date loanDate, Date dueDate) {
-        this.bookId = bookId;
-        this.userId = userId;
+    public CreateLoanDto(String bookTitle, String username, Date loanDate, Date dueDate) {
+        this.bookTitle = bookTitle;
+        this.username = username;
         this.loanDate = loanDate;
         this.dueDate = dueDate;
     }
 
-    public long getBookId() {
-        return bookId;
+    public String getBookTitle() {
+        return bookTitle;
     }
 
-    public void setBookId(long bookId) {
-        this.bookId = bookId;
+    public void setBookTitle(String bookTitle) {
+        this.bookTitle = bookTitle;
     }
 
-    public long getUserId() {
-        return userId;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserId(long userId) {
-        this.userId = userId;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public Date getLoanDate() {

@@ -4,11 +4,13 @@ import org.library.backend.Controller.DTO.LoanDto.CreateLoanDto;
 import org.library.backend.Controller.DTO.LoanDto.CreateLoanResponseDto;
 import org.library.backend.Controller.DTO.LoanDto.GetLoanDto;
 import org.library.backend.Controller.DTO.LoanDto.UpdateLoanDto;
+import org.library.backend.Infrastructure.Entity.BookEntity;
 import org.library.backend.Infrastructure.Entity.LoanEntity;
 import org.library.backend.Infrastructure.Repository.AuthRepository;
 import org.library.backend.Infrastructure.Repository.BookRepository;
 import org.library.backend.Infrastructure.Repository.LoanRepository;
 import org.library.backend.Infrastructure.Repository.UserRepository;
+import org.library.backend.Service.exceptions.NoAvailableCopiesException;
 import org.library.backend.Service.exceptions.NotFound.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,14 +27,12 @@ public class LoanService {
     private final LoanRepository loanRepository;
     private final UserRepository userRepository;
     private final BookRepository bookRepository;
-    private final AuthRepository authRepository;
 
     @Autowired
-    public LoanService(LoanRepository loanRepository, UserRepository userRepository, BookRepository bookRepository, AuthRepository authRepository) {
+    public LoanService(LoanRepository loanRepository, UserRepository userRepository, BookRepository bookRepository) {
         this.loanRepository = loanRepository;
         this.userRepository = userRepository;
         this.bookRepository = bookRepository;
-        this.authRepository = authRepository;
     }
 
     /**
@@ -50,11 +50,11 @@ public class LoanService {
     /**
      * Retrieves all loans DTOs by user ID
      *
-     * @param id the ID of the user
+     * @param username the username of the user
      * @return the list of GetLoanDto representing all loans of the user
      */
-    public List<GetLoanDto> getAllLoansByUserId(long id) {
-        var loans = loanRepository.findAllByUserId(id);
+    public List<GetLoanDto> getAllLoansByUsername(String username) {
+        var loans = loanRepository.findAllByUserFullUsername(username);
         return loans.stream().map((loan) -> new GetLoanDto(loan.getId(), loan.getBook().getTitle(), loan.getUser().getFullUsername(), loan.getLoanDate(), loan.getDueDate(), loan.getReturnDate())).collect(Collectors.toList());
     }
 
@@ -77,8 +77,15 @@ public class LoanService {
     public CreateLoanResponseDto createLoan(CreateLoanDto loanDto) {
         var date = new Date();
         var loanEntity = new LoanEntity();
-        var bookEntity = bookRepository.findById(loanDto.getBookId()).orElseThrow(() -> new BookNotFoundException(loanDto.getBookId()));
-        var userEntity = userRepository.findById(loanDto.getUserId()).orElseThrow(() -> new UserNotFoundException(loanDto.getUserId()));
+        var bookEntity = bookRepository.findByTitle(loanDto.getBookTitle()).orElseThrow(() -> new BookNotFoundException(loanDto.getBookTitle()));
+        var userEntity = userRepository.findByFullUsername(loanDto.getUsername()).orElseThrow(() -> new UserNotFoundException(loanDto.getUsername()));
+
+        if (bookEntity.getAvailableCopies() == 0) {
+            throw new NoAvailableCopiesException(bookEntity.getId());
+        }
+
+        bookEntity.setAvailableCopies(bookEntity.getAvailableCopies() - 1);
+        bookRepository.save(bookEntity);
 
         loanEntity.setUser(userEntity);
         loanEntity.setBook(bookEntity);
@@ -110,6 +117,12 @@ public class LoanService {
 
         loan.setReturnDate(updateLoanDto.getReturnDate());
         LoanEntity updatedLoan = loanRepository.save(loan);
+
+
+        BookEntity bookEntity = loan.getBook();
+
+        bookEntity.setAvailableCopies(bookEntity.getAvailableCopies() + 1);
+        bookRepository.save(bookEntity);
 
         return new GetLoanDto(
                 updatedLoan.getId(),

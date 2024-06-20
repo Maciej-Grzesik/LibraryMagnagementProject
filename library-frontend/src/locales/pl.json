@@ -15,8 +15,8 @@
   "browse_books": "Szukaj książki",
   "browse_loans": "Szukaj wypożyczenia",
   "account": "Konto",
-  "user_profile": "Profil użytkownika",
-  "sign_out": "Wyloguj się",
+  "user_profile": "Profil",
+  "sign_out": "Wyloguj",
   "title": "Tytuł",
   "author": "Autor",
   "year_of_publish": "Rok publikacji",
@@ -36,5 +36,14 @@
   "add_new_loan": "Dodaj nowe wypożyczenie",
   "genre": "Gatunek",
   "summary": "Opis",
-  "imgURL": "Adres URL okładki"
+  "imgURL": "Adres URL okładki",
+  "error_401_title": "Error 401",
+  "error_401_message": "Wygląda na to że nie posiadasz uprawnień do tej strony",
+  "go_back_home": "Powróć do strony głównej",
+  "your_loans": "Twoje wypożyczenia",
+  "update_user": "Zaktualizuj hasło",
+  "update_successful": "Aktualizacja przebiegła pomyślnie",
+  "new_password": "Nowe hasło",
+  "current_password": "Obecne hasło",
+  "loan_details": "Podaj datę zwrotu"
 }

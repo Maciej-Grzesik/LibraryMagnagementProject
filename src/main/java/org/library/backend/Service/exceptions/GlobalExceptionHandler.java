@@ -41,7 +41,8 @@ public class GlobalExceptionHandler {
             UserNotFoundException.class,
             BookInfoNotFoundException.class,
             UsernameNotFoundException.class,
-            BookTitleNotFoundException.class
+            BookTitleNotFoundException.class,
+            NoAvailableCopiesException.class
     })
     public ResponseEntity<ErrorResponse> handleNotFoundExceptions(Exception ex) {
         ErrorResponse errorResponse = new ErrorResponse(HttpStatus.NOT_FOUND.value(), ex.getMessage());

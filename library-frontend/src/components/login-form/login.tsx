@@ -1,4 +1,4 @@
-import { useMemo, useCallback } from 'react'
+import { useMemo, useCallback } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as yup from 'yup';
 import { useNavigate } from 'react-router-dom';
@@ -6,13 +6,13 @@ import { useApi } from '../api/ApiProvider';
 import { useTranslation } from 'react-i18next';
 
 function Login() {
-  const {t, i18n} = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const apiClient = useApi();
 
   const initialValues = {
     username: '',
-    password: ''
+    password: '',
   };
 
   const onSubmit = useCallback(
@@ -21,7 +21,7 @@ function Login() {
         if (response.success) {
           navigate('/home');
         } else {
-          formik.setFieldError('username', 'Invalid username or password')
+          formik.setFieldError('username', 'Invalid username or password');
         }
       });
     },
@@ -32,58 +32,73 @@ function Login() {
     () =>
       yup.object().shape({
         username: yup.string().required(t('username_error_msg')),
-        password: yup.string().required(t('password_error_msg')).min(5, t('min_pass')),
+        password: yup
+          .string()
+          .required(t('password_error_msg'))
+          .min(5, t('min_pass')),
       }),
     [],
   );
 
   return (
-    <div className="h-screen flex items-center justify-center bg-gray-light">
-      <Formik initialValues={initialValues} onSubmit={onSubmit} validationSchema={validationSchema}>
-        {formik => (
-          <Form className="bg-white shadow-xl rounded-lg px-8 pt-6 pb-8 mb-4 bg-opacity-100 transform scale-125">
-            <div className="mb-4 ">
+    <div className="flex h-screen items-center justify-center bg-st-tropaz-100">
+      <Formik
+        initialValues={initialValues}
+        onSubmit={onSubmit}
+        validationSchema={validationSchema}
+      >
+        {(formik) => (
+          <Form className="mb-4 scale-125 transform rounded-lg bg-st-tropaz-50 bg-opacity-100 px-8 pb-8 pt-6 shadow-xl">
+            <div className="mb-4">
               <label
-                className="block text-gray-700 text-sm font-bold mb-2 text-left"
+                className="mb-2 block text-left text-sm font-bold text-gray-700"
                 htmlFor="username"
               >
                 {t('username')}
               </label>
               <Field
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
                 id="username"
                 type="text"
                 name="username"
                 placeholder="Username"
               />
-              <ErrorMessage name="username" component="div" className="text-red-500 text-xs italic" />
+              <ErrorMessage
+                name="username"
+                component="div"
+                className="text-xs italic text-red-500"
+              />
             </div>
             <div className="mb-6">
               <label
-                className="block text-gray-700 text-left text-sm font-bold mb-2"
+                className="mb-2 block text-left text-sm font-bold text-gray-700"
                 htmlFor="password"
               >
                 {t('password')}
               </label>
               <Field
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+                className="focus:shadow-outline mb-3 w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
                 id="password"
                 type="password"
                 name="password"
                 placeholder="******************"
               />
-              <ErrorMessage name="password" component="div" className="text-red-500 text-xs italic" />
+              <ErrorMessage
+                name="password"
+                component="div"
+                className="text-xs italic text-red-500"
+              />
             </div>
             <div className="flex items-center justify-between">
               <button
-                className="bg-blue-light hover:bg-blue-facebook active:scale-105 hover:scale-110 duration-200 ease-in-out text-white font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline"
+                className="focus:shadow-outline rounded bg-st-tropaz-400 px-6 py-2 font-bold text-white duration-200 ease-in-out hover:scale-110 hover:bg-blue-facebook focus:outline-none"
                 type="submit"
                 disabled={!formik.isValid || formik.isSubmitting}
               >
                 {t('sign_in')}
               </button>
               <a
-                className="block ml-8 align-baseline font-bold text-sm text-blue-light hover:text-blue-facebook "
+                className="ml-8 block align-baseline text-sm font-bold text-st-tropaz-400 hover:text-blue-facebook hover:animate-wiggle"
                 href="#"
               >
                 {t('forgot_password')}

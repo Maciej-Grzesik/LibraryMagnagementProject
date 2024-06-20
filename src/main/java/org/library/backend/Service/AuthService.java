@@ -1,9 +1,6 @@
 package org.library.backend.Service;
 
-import org.library.backend.Controller.DTO.LoginDto;
-import org.library.backend.Controller.DTO.LoginResponseDto;
-import org.library.backend.Controller.DTO.RegisterDto;
-import org.library.backend.Controller.DTO.RegisterResponseDto;
+import org.library.backend.Controller.DTO.*;
 import org.library.backend.Infrastructure.Entity.AuthEntity;
 import org.library.backend.Infrastructure.Entity.UserEntity;
 import org.library.backend.Infrastructure.Repository.AuthRepository;
@@ -81,5 +78,17 @@ public class AuthService {
         String username = loginDto.getUsername();
         UserRole userRole = authEntity.getUserRole();
         return new LoginResponseDto(token, username, userRole);
+    }
+
+    public void updatePassword(UpdatePasswordDto passwordDto) {
+        AuthEntity authEntity = authRepository.findByUsername(passwordDto.getUsername())
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + passwordDto.getUsername()));
+
+        if (!passwordEncoder.matches(passwordDto.getCurrentPassword(), authEntity.getPassword())) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid username or password");
+        }
+
+        authEntity.setPassword(passwordEncoder.encode(passwordDto.getNewPassword()));
+        authRepository.save(authEntity);
     }
 }
