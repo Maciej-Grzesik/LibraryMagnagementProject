@@ -3,22 +3,31 @@ package org.library.backend.Controller.DTO.LoanDto;
 import java.util.Date;
 
 public class GetLoanDto {
+    private long id;
     private String title;
     private String username;
     private Date loanDate;
     private Date dueDate;
     private Date returnDate;
 
-
     public GetLoanDto() {
     }
 
-    public GetLoanDto(String title, String user, Date loanDate, Date dueDate, Date returnDate) {
+    public GetLoanDto(long id, String title, String username, Date loanDate, Date dueDate, Date returnDate) {
+        this.id = id;
         this.title = title;
-        this.username = user;
+        this.username = username;
         this.loanDate = loanDate;
         this.dueDate = dueDate;
         this.returnDate = returnDate;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getTitle() {

@@ -44,6 +44,7 @@ public class BookInfoController {
      */
     @PostMapping("/create")
     public ResponseEntity<CreateBookInfoResponseDto> createBookInfo(@RequestBody CreateBookInfoDto bookInfoDto) {
+        System.out.println(bookInfoDto.getBookId() + bookInfoDto.getGenre());
         var newBookInfo = bookInfoService.createBookInfo(bookInfoDto);
         return new ResponseEntity<>(newBookInfo, HttpStatus.CREATED);
     }

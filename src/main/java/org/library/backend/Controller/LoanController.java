@@ -3,6 +3,8 @@ package org.library.backend.Controller;
 import org.library.backend.Controller.DTO.LoanDto.CreateLoanDto;
 import org.library.backend.Controller.DTO.LoanDto.CreateLoanResponseDto;
 import org.library.backend.Controller.DTO.LoanDto.GetLoanDto;
+import org.library.backend.Controller.DTO.LoanDto.UpdateLoanDto;
+import org.library.backend.Infrastructure.Entity.LoanEntity;
 import org.library.backend.Service.LoanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -65,6 +67,13 @@ public class LoanController {
         var newLoan = loanService.createLoan(loanDto);
         return new ResponseEntity<>(newLoan, HttpStatus.CREATED);
     }
+
+    @PutMapping("/update")
+    public ResponseEntity<GetLoanDto> updateLoan(@RequestBody UpdateLoanDto updateLoanDto) {
+        var updatedLoan = loanService.updateLoan(updateLoanDto);
+        return new ResponseEntity<>(updatedLoan, HttpStatus.OK);
+    }
+
 
     /**
      * Endpoint to delete a loan by ID

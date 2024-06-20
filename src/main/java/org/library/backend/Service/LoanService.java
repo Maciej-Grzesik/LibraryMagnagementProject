@@ -3,6 +3,7 @@ package org.library.backend.Service;
 import org.library.backend.Controller.DTO.LoanDto.CreateLoanDto;
 import org.library.backend.Controller.DTO.LoanDto.CreateLoanResponseDto;
 import org.library.backend.Controller.DTO.LoanDto.GetLoanDto;
+import org.library.backend.Controller.DTO.LoanDto.UpdateLoanDto;
 import org.library.backend.Infrastructure.Entity.LoanEntity;
 import org.library.backend.Infrastructure.Repository.AuthRepository;
 import org.library.backend.Infrastructure.Repository.BookRepository;
@@ -43,7 +44,7 @@ public class LoanService {
      */
     public GetLoanDto getLoanDto(long id) {
         var loan = loanRepository.findById(id).orElseThrow(() -> new LoanNotFoundException(id));
-        return new GetLoanDto(loan.getBook().getTitle(), loan.getUser().getFullUsername(), loan.getLoanDate(), loan.getDueDate(), loan.getReturnDate());
+        return new GetLoanDto(loan.getId(), loan.getBook().getTitle(), loan.getUser().getFullUsername(), loan.getLoanDate(), loan.getDueDate(), loan.getReturnDate());
     }
 
     /**
@@ -54,7 +55,7 @@ public class LoanService {
      */
     public List<GetLoanDto> getAllLoansByUserId(long id) {
         var loans = loanRepository.findAllByUserId(id);
-        return loans.stream().map((loan) -> new GetLoanDto(loan.getBook().getTitle(), loan.getUser().getFullUsername(), loan.getLoanDate(), loan.getDueDate(), loan.getReturnDate())).collect(Collectors.toList());
+        return loans.stream().map((loan) -> new GetLoanDto(loan.getId(), loan.getBook().getTitle(), loan.getUser().getFullUsername(), loan.getLoanDate(), loan.getDueDate(), loan.getReturnDate())).collect(Collectors.toList());
     }
 
     public List<GetLoanDto> getAllLoans() {
@@ -62,7 +63,7 @@ public class LoanService {
         for (LoanEntity loan: loans) {
             System.out.println(loan.getUser().getFullUsername());
         }
-        return loans.stream().map((loan) -> new GetLoanDto(loan.getBook().getTitle(), loan.getUser().getFullUsername(), loan.getLoanDate(), loan.getDueDate(), loan.getReturnDate())).collect(Collectors.toList());
+        return loans.stream().map((loan) -> new GetLoanDto(loan.getId(), loan.getBook().getTitle(), loan.getUser().getFullUsername(), loan.getLoanDate(), loan.getDueDate(), loan.getReturnDate())).collect(Collectors.toList());
     }
 
     /**
@@ -103,4 +104,19 @@ public class LoanService {
     }
 
 
+    public GetLoanDto updateLoan(UpdateLoanDto updateLoanDto) {
+        LoanEntity loan = loanRepository.findById(updateLoanDto.getLoanId())
+                .orElseThrow(() -> new LoanNotFoundException(updateLoanDto.getLoanId()));
+
+        loan.setReturnDate(updateLoanDto.getReturnDate());
+        LoanEntity updatedLoan = loanRepository.save(loan);
+
+        return new GetLoanDto(
+                updatedLoan.getId(),
+                updatedLoan.getBook().getTitle(),
+                updatedLoan.getUser().getFullUsername(),
+                updatedLoan.getLoanDate(),
+                updatedLoan.getDueDate(),
+                updatedLoan.getReturnDate());
+    }
 }

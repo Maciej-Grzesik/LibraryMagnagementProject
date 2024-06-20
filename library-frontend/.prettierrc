@@ -3,6 +3,9 @@
     "tabWidth": 2,
     "useTabs": false,
     "eslintIntegration": true,
+<<<<<<< HEAD
     "semi": false,
+=======
+>>>>>>> 776a8bfeb9d08a8abf9ae93526ccf12371fa88bc
     "plugins": ["prettier-plugin-tailwindcss"]
 }

@@ -37,9 +37,12 @@ function Navbar() {
   }, [])
 
   return (
-    <div className="fixed left-0 right-0 top-0">
-      <nav className="border-gray-2 bg-blue-facebook">
-        <div className="mx-auto flex w-11/12 items-center justify-between py-5">
+    <div className='fixed top-0 left-0 right-0 z-40 shadow-2xl'
+    style={{
+      animation: 'fade-down 1s'
+    }}>
+      <nav className="bg-blue-facebook border-gray-2">
+        <div className="w-11/12 flex items-center justify-between mx-auto py-5">
           <a
             onClick={(e) => {
               e.preventDefault()
@@ -167,4 +170,4 @@ function Navbar() {
   )
 }
 
-export default Navbar
+export default Navbar;
