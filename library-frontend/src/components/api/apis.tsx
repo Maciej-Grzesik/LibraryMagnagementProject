@@ -1,7 +1,7 @@
-import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
+import axios, { AxiosError, AxiosInstance, AxiosResponse, HttpStatusCode } from 'axios';
 import { LoginDto, LoginResponseDto } from './dto/login.dto';
 import { CreateBookDTO, GetBookDTO, ResponseBookDTO } from './dto/book.dto';
-import { CreateUserDTO, ResponseUserDTO, UpdateUserDTO, UpdateUserResponseDTO } from './dto/user.dto';
+import { CreateUserDTO, ResponseUserDTO, UpdateUserDTO } from './dto/user.dto';
 import {
   GetLoanDTO,
   CreateLoanDTO,
@@ -157,9 +157,9 @@ export class LibraryClient {
 
   public async updateUser(
     uptadedUser: UpdateUserDTO,
-  ): Promise<ClientResponse<UpdateUserResponseDTO | null>> {
+  ): Promise<ClientResponse<HttpStatusCode.Ok | null>> {
     try {
-      const response = await this.client.put(`/loan/update`, uptadedUser);
+      const response = await this.client.put(`/auth/updatePassword`, uptadedUser);
       return {
         success: true,
         data: response.data,

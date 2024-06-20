@@ -37,5 +37,9 @@
   "error_401_title": "Error 401",
   "error_401_message": "Looks like you are not authorized to access this page",
   "go_back_home": "Go back to home page",
-  "your_loans": "Your loans"
+  "your_loans": "Your loans",
+  "update_user": "Update password",
+  "update_successful": "Update successful",
+  "new_password": "New password",
+  "current_password": "Current password"
 }

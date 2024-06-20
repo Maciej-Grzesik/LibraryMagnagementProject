@@ -22,7 +22,7 @@ function BookTable() {
 
   const [filterText, setFilterText] = useState('');
   const [page, setPage] = useState(1);
-  const itemsPerPage = 5;
+  const itemsPerPage = 10;
 
   const apiClient = useApi();
   const role = apiClient.getRole();

@@ -40,5 +40,9 @@
   "error_401_title": "Error 401",
   "error_401_message": "Wygląda na to że nie posiadasz uprawnień do tej strony",
   "go_back_home": "Powróć do strony głównej",
-  "your_loans": "Twoje wypożyczenia"
+  "your_loans": "Twoje wypożyczenia",
+  "update_user": "Zaktualizuj hasło",
+  "update_successful": "Aktualizacja przebiegła pomyślnie",
+  "new_password": "Nowe hasło",
+  "current_password": "Obecne hasło"
 }

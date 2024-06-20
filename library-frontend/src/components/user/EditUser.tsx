@@ -1,45 +1,53 @@
-import React, { useMemo, useCallback } from 'react';
+import React, { useMemo, useCallback, useState } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as yup from 'yup';
 import { useApi } from '../api/ApiProvider';
 import { useTranslation } from 'react-i18next';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function EditUser() {
   const { t, i18n } = useTranslation();
-
   const apiClient = useApi();
+  const username = apiClient.getUsername(); 
 
   const initialValues = {
+    username: username ? username : '',
     currentPassword: '',
     newPassword: '',
   };
 
   const onSubmit = useCallback(
-    (
-      values: {
-        currentPassword: string;
-        newPassword: string;
+    (values: {
+      username: string;
+      currentPassword: string;
+      newPassword: string;
       },
-      formik: any,
-    ) => {
+      formik: any,) => {
       apiClient.updateUser(values).then((response) => {
         if (response.success) {
+          toast.success(t('update_successful'), {
+            position: 'top-center',
+          });
         } else {
-          formik.setFieldError('username', 'Error adding user');
+          formik.setFieldError('username', t('error_adding_user'));
         }
       });
     },
-    [apiClient],
+    [apiClient, t],
   );
 
   const validationSchema = useMemo(
     () =>
       yup.object().shape({
-        username: yup.string().required('Username is required'),
-        currentPassword: yup.string().required('Current password is required'),
-        newPassword: yup.string().required('New password is required').min(5),
+        username: yup.string().required(t('username_required')),
+        currentPassword: yup.string().required(t('current_password_required')),
+        newPassword: yup
+          .string()
+          .required(t('new_password_required'))
+          .min(5, t('new_password_min_length')),
       }),
-    [],
+    [t],
   );
 
   return (
@@ -103,6 +111,7 @@ function EditUser() {
           </Form>
         )}
       </Formik>
+      <ToastContainer />
     </div>
   );
 }

@@ -1,6 +1,6 @@
 export class CreateLoanDTO {
-  bookId: number | undefined;
-  userId: number | undefined;
+  bookTitle: string | undefined;
+  username: string | undefined;
   loanDate: string | undefined;
   dueDate: string | undefined;
 }

@@ -33,7 +33,7 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ onClose }) => {
         availableCopies: yup
           .number()
           .required('Available copies are required')
-          .min(0),
+          .min(1),
       }),
     [],
   );

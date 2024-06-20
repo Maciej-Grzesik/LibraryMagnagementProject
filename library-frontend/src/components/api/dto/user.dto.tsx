@@ -14,10 +14,7 @@ export class ResponseUserDTO {
 }
 
 export class UpdateUserDTO {
+  username: string | undefined;
   currentPassword: string | undefined;
   newPassword: string | undefined;
-}
-
-export class UpdateUserResponseDTO {
-  username: string | undefined;
 }
