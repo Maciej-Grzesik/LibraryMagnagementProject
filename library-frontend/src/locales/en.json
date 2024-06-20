@@ -45,5 +45,10 @@
   "loan_details": "Set return date",
   "genre": "Genre",
   "summary": "Summary",
-  "imgURL": "URL adress of an image"
+  "imgURL": "URL adress of an image",
+  "add_new_review": "Add new review",
+  "reviews": "Reviews",
+  "rating": "Rating",
+  "comment": "Comment",
+  "date": "Date"
 }

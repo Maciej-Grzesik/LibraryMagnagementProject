@@ -45,5 +45,10 @@
   "update_successful": "Aktualizacja przebiegła pomyślnie",
   "new_password": "Nowe hasło",
   "current_password": "Obecne hasło",
-  "loan_details": "Podaj datę zwrotu"
+  "loan_details": "Podaj datę zwrotu",
+  "add_new_review": "Dodaj nową recenzję",
+  "reviews": "Opinie",
+  "rating": "Ocena",
+  "comment": "Komentarz",
+  "date": "Data"
 }

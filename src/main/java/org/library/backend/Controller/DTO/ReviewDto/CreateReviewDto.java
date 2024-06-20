@@ -3,37 +3,41 @@ package org.library.backend.Controller.DTO.ReviewDto;
 import java.util.Date;
 
 public class CreateReviewDto {
-    private long userId;
-    private long bookId;
+    private String username;
+    private String bookTitle;
     private double rating;
     private String comment;
-    private Date date;
 
-    public CreateReviewDto(long userId, long bookId, double rating, String comment, Date date) {
-        this.userId = userId;
-        this.bookId = bookId;
+
+    public CreateReviewDto(String username, String bookTitle, double rating, String comment) {
+        this.username = username;
+        this.bookTitle = bookTitle;
         this.rating = rating;
         this.comment = comment;
-        this.date = date;
+
     }
 
     public CreateReviewDto() {
     }
 
-    public long getUserId() {
-        return userId;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserId(long userId) {
-        this.userId = userId;
+    public void setUserId(String userId) {
+        this.username = userId;
     }
 
-    public long getBookId() {
-        return bookId;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public void setBookId(long bookId) {
-        this.bookId = bookId;
+    public String getBookTitle() {
+        return bookTitle;
+    }
+
+    public void setBookTitle(String bookTitle) {
+        this.bookTitle = bookTitle;
     }
 
     public double getRating() {
@@ -52,11 +56,4 @@ public class CreateReviewDto {
         this.comment = comment;
     }
 
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
 }

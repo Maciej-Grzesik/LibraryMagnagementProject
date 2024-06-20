@@ -10,6 +10,7 @@ import {
 } from './dto/loan.dto';
 import { jwtDecode } from 'jwt-decode';
 import { GetBookInfoDTO, CreateBookInfoDTO } from './dto/book.info.dto';
+import { CreateReviewDto, GetReviewDto } from './dto/review.dto';
 
 export type ClientResponse<T> = {
   success: boolean;
@@ -304,6 +305,46 @@ export class LibraryClient {
   ): Promise<ClientResponse<CreateBookInfoDTO | null>> {
     try {
       const response = await this.client.post(`/info/create`, data);
+      return {
+        success: true,
+        data: response.data,
+        statusCode: response.status,
+      };
+    } catch (error) {
+      const axiosError = error as AxiosError<Error>;
+      return {
+        success: false,
+        data: null,
+        statusCode: axiosError.response?.status || 0,
+      };
+    }
+  }
+
+  public async addBookReview(
+    data: CreateReviewDto,
+  ): Promise<ClientResponse<GetReviewDto | null >> {
+    try {
+      const response = await this.client.post(`/review/create`, data);
+      return {
+        success: true,
+        data: response.data,
+        statusCode: response.status,
+      };
+    } catch (error) {
+      const axiosError = error as AxiosError<Error>;
+      return {
+        success: false,
+        data: null,
+        statusCode: axiosError.response?.status || 0,
+      };
+    }
+  }
+
+  public async getReview(
+    title: string,
+  ): Promise<ClientResponse<GetReviewDto[] | null>> {
+    try {
+      const response = await this.client.get<GetReviewDto[]>(`/review/getByBook/${title}`);
       return {
         success: true,
         data: response.data,

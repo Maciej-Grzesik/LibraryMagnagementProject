@@ -38,7 +38,6 @@ const LoanInfoModal: React.FC<LoanInfoModalProps> = ({ onClose, loan }) => {
 
   const onSubmit = useCallback(
     async (values: UpdateLoanDTO, formik: any) => {
-      console.log('es>?');
       const response = await apiClient.updateLoan(values);
       if (response.success && response.data) {
         setLoanInfo(response.data);

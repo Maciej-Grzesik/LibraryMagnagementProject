@@ -13,6 +13,7 @@ import org.library.backend.Service.exceptions.NotFound.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,12 +36,12 @@ public class ReviewService {
     /**
      * Retrieves all reviews DTOs by book ID
      *
-     * @param id the ID of the book
+     * @param title the ID of the book
      * @return the list of GetReviewDto representing all reviews of the book
      */
-    public List<GetReviewDto> getReviewsByBookId(long id) {
-        var reviews = reviewRepository.findAllByBookId(id);
-        return reviews.stream().map((review) -> new GetReviewDto(review.getRating(), review.getComment(), review.getDate())).collect(Collectors.toList());
+    public List<GetReviewDto> getReviewsByBookTitle(String title) {
+        var reviews = reviewRepository.findAllByBookTitle(title);
+        return reviews.stream().map((review) -> new GetReviewDto(review.getRating(), review.getComment(), review.getDate(), review.getUser().getFullUsername())).collect(Collectors.toList());
     }
 
     /**
@@ -51,7 +52,7 @@ public class ReviewService {
      */
     public List<GetReviewDto> getReviewsByUserId(long id) {
         var reviews = reviewRepository.findAllByUserId(id);
-        return reviews.stream().map((review) -> new GetReviewDto(review.getRating(), review.getComment(), review.getDate())).collect(Collectors.toList());
+        return reviews.stream().map((review) -> new GetReviewDto(review.getRating(), review.getComment(), review.getDate(), review.getUser().getFullUsername())).collect(Collectors.toList());
     }
 
     /**
@@ -63,18 +64,18 @@ public class ReviewService {
      * @throws UserNotFoundException if the user with the specified ID is not found
      */
     public CreateReviewResponseDto createReview(CreateReviewDto reviewDto) {
-        var bookEntity = bookRepository.findById(reviewDto.getBookId()).orElseThrow(() -> new BookNotFoundException(reviewDto.getBookId()));
-        var userEntity = userRepository.findById(reviewDto.getUserId()).orElseThrow(() -> new UserNotFoundException(reviewDto.getUserId()));
+        var bookEntity = bookRepository.findByTitle(reviewDto.getBookTitle()).orElseThrow(() -> new BookNotFoundException(reviewDto.getBookTitle()));
+        var userEntity = userRepository.findByFullUsername(reviewDto.getUsername()).orElseThrow(() -> new UserNotFoundException(reviewDto.getUsername()));
         var reviewEntity = new ReviewEntity();
-
+        var date = new Date();
         reviewEntity.setBook(bookEntity);
         reviewEntity.setUser(userEntity);
         reviewEntity.setComment(reviewDto.getComment());
         reviewEntity.setRating(reviewDto.getRating());
-        reviewEntity.setDate(reviewDto.getDate());
+        reviewEntity.setDate(date);
 
         var newReview = reviewRepository.save(reviewEntity);
-        return new CreateReviewResponseDto(newReview.getRating(), newReview.getComment(), newReview.getDate());
+        return new CreateReviewResponseDto(newReview.getRating(), newReview.getComment());
     }
 
     /**

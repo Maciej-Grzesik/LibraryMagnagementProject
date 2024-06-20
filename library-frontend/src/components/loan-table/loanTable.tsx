@@ -7,6 +7,7 @@ import { GetLoanDTO } from '../api/dto/loan.dto';
 import AddLoanModal from './LoanModal';
 import { useTranslation } from 'react-i18next';
 import LoanInfoModal from './LoanInfoModal';
+import LoanReviewReaderModal from './LoanReviewReaderModal';
 
 function LoanTable() {
   const apiClient = useApi();
@@ -18,6 +19,7 @@ function LoanTable() {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoanInfoOpen, setIsLoanInfoOpen] = useState(false);
+  const [isLoanReviewOpen, setIsLoanReviewOpen] = useState(false);
 
   const [filterText, setFilterText] = useState('');
   const [page, setPage] = useState(1);
@@ -29,21 +31,17 @@ function LoanTable() {
   ) => {
     setPage(value);
   };
-  
+
   useEffect(() => {
     const getLoans = async () => {
       if (role === 'ROLE_ADMIN') {
-        
         const response = await apiClient.getLoans();
         if (response.success && response.data) {
           setLoans(response.data);
         }
       } else {
-        
         const response = await apiClient.getLoansByUsername();
-        
         if (response.success && response.data) {
-          console.log(response.data, apiClient.getUsername())
           setLoans(response.data);
         }
       }
@@ -51,20 +49,24 @@ function LoanTable() {
 
     getLoans();
 
-    if (!isModalOpen) {
+    if (!isModalOpen && !isLoanInfoOpen && !isLoanReviewOpen) {
       getLoans();
     }
-  }, [apiClient, isModalOpen, isLoanInfoOpen, role]);
+  }, [apiClient, isModalOpen, isLoanInfoOpen, isLoanReviewOpen, role]);
 
   const handleRowClick = (loan: GetLoanDTO) => {
     setSelectedLoan(loan);
-    setIsLoanInfoOpen(true);
+    if (role === 'ROLE_ADMIN') {
+      setIsLoanInfoOpen(true);
+    } else if (role === 'ROLE_READER') {
+      setIsLoanReviewOpen(true);
+    }
   };
 
   const filteredData = loans.filter(
     (loan) =>
-      loan.title?.includes(filterText.toLowerCase()) ||
-      loan.username?.includes(filterText.toLowerCase()),
+      loan.title?.toLowerCase().includes(filterText.toLowerCase()) ||
+      loan.username?.toLowerCase().includes(filterText.toLowerCase()),
   );
 
   const displayData = filteredData
@@ -86,11 +88,7 @@ function LoanTable() {
         <tr
           key={index}
           className={`${isOverdue ? 'bg-red-light-opacity-50' : index % 2 === 0 ? 'bg-blue-light-opacity-50' : 'bg-white'} h-10 break-all shadow-md duration-500 ease-in-out hover:scale-105 hover:cursor-pointer`}
-          onClick={() => {
-            if (role === 'ROLE_ADMIN') {
-              handleRowClick(loan)
-            } 
-          }}
+          onClick={() => handleRowClick(loan)}
         >
           <td className="rounded-l-md border-b border-l border-t border-gray-700 border-opacity-30 pl-3">
             {loan.username}
@@ -113,7 +111,6 @@ function LoanTable() {
 
   return (
     <div className="h-screen bg-gray-light">
-      
       <div className="flex flex-col items-center justify-center pt-32">
         <div className="relative mx-auto flex w-11/12 flex-row">
           <div className="relative flex items-center text-gray-400 focus-within:text-gray-600">
@@ -128,14 +125,16 @@ function LoanTable() {
             />
           </div>
           <div className="absolute -right-2">
-            { role === 'ROLE_ADMIN' && (<button
-              className="group relative mb-2 me-2 inline-flex items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-cyan-500 to-blue-500 p-0.5 text-sm font-medium text-gray-900 duration-200 ease-in-out hover:scale-105 hover:text-white active:scale-95 group-hover:from-cyan-500 group-hover:to-blue-500"
-              onClick={(e) => setIsModalOpen(true)}
-            >
-              <span className="dark:white relative rounded-md bg-white px-5 py-2.5 text-blue-facebook transition-all duration-75 ease-in hover:text-white group-hover:bg-opacity-0">
-                {t('add_new_loan')}
-              </span>
-            </button>)}
+            {role === 'ROLE_ADMIN' && (
+              <button
+                className="group relative mb-2 me-2 inline-flex items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-cyan-500 to-blue-500 p-0.5 text-sm font-medium text-gray-900 duration-200 ease-in-out hover:scale-105 hover:text-white active:scale-95 group-hover:from-cyan-500 group-hover:to-blue-500"
+                onClick={(e) => setIsModalOpen(true)}
+              >
+                <span className="dark:white relative rounded-md bg-white px-5 py-2.5 text-blue-facebook transition-all duration-75 ease-in hover:text-white group-hover:bg-opacity-0">
+                  {t('add_new_loan')}
+                </span>
+              </button>
+            )}
           </div>
         </div>
         <table className="w-11/12 table-auto border-separate border-spacing-y-3 text-left">
@@ -164,6 +163,12 @@ function LoanTable() {
           <LoanInfoModal
             loan={selectedLoan}
             onClose={() => setIsLoanInfoOpen(false)}
+          />
+        )}
+        {isLoanReviewOpen && (
+          <LoanReviewReaderModal
+            loan={selectedLoan}
+            onClose={() => setIsLoanReviewOpen(false)}
           />
         )}
       </div>

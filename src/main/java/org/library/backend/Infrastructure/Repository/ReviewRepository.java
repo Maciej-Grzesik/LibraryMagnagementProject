@@ -27,4 +27,6 @@ public interface ReviewRepository extends JpaRepository<ReviewEntity, Long> {
      * @return a list of ReviewEntity objects associated with the given user ID
      */
     List<ReviewEntity> findAllByUserId(long id);
+
+    List<ReviewEntity> findAllByBookTitle(String title);
 }

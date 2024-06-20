@@ -5,12 +5,10 @@ import java.util.Date;
 public class CreateReviewResponseDto {
     private double rating;
     private String comment;
-    private Date date;
 
-    public CreateReviewResponseDto(double rating, String comment, Date date) {
+    public CreateReviewResponseDto(double rating, String comment) {
         this.rating = rating;
         this.comment = comment;
-        this.date = date;
     }
 
     public CreateReviewResponseDto() {
@@ -32,11 +30,4 @@ public class CreateReviewResponseDto {
         this.comment = comment;
     }
 
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
 }

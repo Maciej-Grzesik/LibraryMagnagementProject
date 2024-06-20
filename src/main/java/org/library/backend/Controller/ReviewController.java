@@ -30,12 +30,12 @@ public class ReviewController {
     /**
      * Endpoint to retrieve reviews by book ID
      *
-     * @param id the ID of the book
+     * @param title the ID of the book
      * @return the list of GetReviewDto representing reviews for the book
      */
-    @GetMapping("/getByBook/{id}")
-    public List<GetReviewDto> getAllByBookId(@PathVariable long id){
-        return reviewService.getReviewsByBookId(id);
+    @GetMapping("/getByBook/{title}")
+    public List<GetReviewDto> getAllByBookTitle(@PathVariable String title){
+        return reviewService.getReviewsByBookTitle(title);
     }
 
     /**
@@ -57,6 +57,7 @@ public class ReviewController {
      */
     @PostMapping("/create")
     public ResponseEntity<CreateReviewResponseDto> createReview(@RequestBody CreateReviewDto reviewDto) {
+        System.out.println(reviewDto.getBookTitle()+ reviewDto.getUsername()+reviewDto.getRating()+reviewDto.getComment());
         var newReview = reviewService.createReview(reviewDto);
         return new ResponseEntity<>(newReview, HttpStatus.CREATED);
     }

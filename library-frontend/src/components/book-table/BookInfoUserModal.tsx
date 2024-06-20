@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useApi } from '../api/ApiProvider';
 import { GetBookInfoDTO } from '../api/dto/book.info.dto';
 import { GetBookDTO } from '../api/dto/book.dto';
-import { SquarePen } from 'lucide-react';
+import { GetReviewDto } from '../api/dto/review.dto';
 
 interface BookInfoUserModalProps {
   onClose: () => void;
@@ -14,18 +14,44 @@ const BookInfoUserModal: React.FC<BookInfoUserModalProps> = ({ onClose, book }) 
   const apiClient = useApi();
   const { t } = useTranslation();
   const [bookInfo, setBookInfo] = useState<GetBookInfoDTO>();
+  const [reviews, setReviews] = useState<GetReviewDto[]>([]);
 
   useEffect(() => {
+    
     const getBookInfo = async (bookId: number) => {
       const response = await apiClient.getBookInfo(bookId);
+      console.log(response);
       if (response.success && response.data) {
         setBookInfo(response.data);
+        
       }
     };
-    if (book && typeof book.id === 'number') {
+
+    const getReview = async (bookTitle: string) => {
+      const responseReview = await apiClient.getReview(bookTitle);
+      console.log(responseReview)
+      if (responseReview.success && responseReview.data) {
+        setReviews(responseReview.data);
+        
+      }
+    }
+    if (book && typeof book.id === 'number' && book.title) {
+      
       getBookInfo(book.id);
+      getReview(book.title)
     }
   }, [book, apiClient]);
+
+  const formatDate = (timestamp: string | number | Date | undefined) => {
+    if (!timestamp) return '-------';
+    const date = new Date(timestamp);
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}.${month}.${year}`;
+  };
+  
+  
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-600 bg-opacity-50">
@@ -68,12 +94,24 @@ const BookInfoUserModal: React.FC<BookInfoUserModalProps> = ({ onClose, book }) 
                 {bookInfo?.genre || '-'}
               </div>
             </div>
-            <div className="mb-2 ">
+            <div className="mb-2">
               <label className="text-gray-700">{t('summary')}</label>
               <div className="rounded border border-gray-300 px-3 py-2">
                 {bookInfo?.summary || '-'}
               </div>
             </div>
+            <div>
+              <label className="text-gray-700">{t('reviews')}</label>
+              {reviews.map((review, index) => (
+                <div key={index} className="rounded border border-gray-300 px-3 py-2 mb-2">
+                  <p><strong>{t('rating')}: </strong>{review.rating}/5</p>
+                  <p><strong>{t('comment')}: </strong>{review.comment}</p>
+                  <p><strong>{t('date')}: </strong>{formatDate(review.date)}</p>
+                  <p><strong>{t('username')}: </strong>{review.username}</p>
+                </div>
+              ))}
+            </div>
+
           </div>
         </div>
       </div>

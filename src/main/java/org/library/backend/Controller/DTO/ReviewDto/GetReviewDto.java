@@ -6,14 +6,24 @@ public class GetReviewDto {
     private double rating;
     private String comment;
     private Date date;
+    private String username;
 
-    public GetReviewDto(double rating, String comment, Date date) {
+    public GetReviewDto(double rating, String comment, Date date, String username) {
         this.rating = rating;
         this.comment = comment;
         this.date = date;
+        this.username = username;
     }
 
     public GetReviewDto() {
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public double getRating() {
